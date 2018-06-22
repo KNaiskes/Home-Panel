@@ -19,7 +19,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := tmpl.Execute(w, page); err != nil {
+	err = tmpl.Execute(w, page)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
