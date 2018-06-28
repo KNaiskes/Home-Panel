@@ -16,6 +16,7 @@ func main() {
 
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/tempHum", temphumiHandler)
 	http.Handle("/html/static/", http.StripPrefix("/html/static/",
 		http.FileServer(http.Dir("html/static/"))))
@@ -62,6 +63,19 @@ func temphumiHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	err = tmpl.Execute(w, page)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+	fp := "html/templates/dashboard.html"
+
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
