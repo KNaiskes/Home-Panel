@@ -3,8 +3,8 @@ package main
 import (
 	"html/template"
 	"log"
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
 type TemperatureHum struct {
@@ -19,7 +19,6 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/tempHum", temphumiHandler)
-	http.HandleFunc("/test", testHandler)
 	http.Handle("/html/static/", http.StripPrefix("/html/static/",
 		http.FileServer(http.Dir("html/static/"))))
 
@@ -30,11 +29,27 @@ func main() {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "html/templates/index.html"
-
 	tmpl, err := template.ParseFiles(fp)
 
-	submit := r.FormValue("smt")
+	submit := r.FormValue("light1")
 	fmt.Println(submit)
+
+	light2 := r.FormValue("light2")
+	fmt.Println(light2)
+
+
+	if submit == "true" {
+		fmt.Println("light1 is: true")
+	} else {
+		fmt.Println("light1 is: false")
+	}
+
+	if light2 == "true" {
+		fmt.Println("light2 is: true")
+	} else {
+		fmt.Println("light2 is: false")
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -85,20 +100,3 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 }
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	fp := "html/templates/test.html"
-
-	tmpl, err := template.ParseFiles(fp)
-	//submit := r.FormValue("submit")
-	//fmt.Println(submit)
-	submit := r.FormValue("title")
-	fmt.Println(submit)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
