@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"fmt"
 )
 
 type TemperatureHum struct {
@@ -18,6 +19,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/tempHum", temphumiHandler)
+	http.HandleFunc("/test", testHandler)
 	http.Handle("/html/static/", http.StripPrefix("/html/static/",
 		http.FileServer(http.Dir("html/static/"))))
 
@@ -30,6 +32,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "html/templates/index.html"
 
 	tmpl, err := template.ParseFiles(fp)
+
+	submit := r.FormValue("smt")
+	fmt.Println(submit)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,3 +85,20 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 }
+func testHandler(w http.ResponseWriter, r *http.Request) {
+	fp := "html/templates/test.html"
+
+	tmpl, err := template.ParseFiles(fp)
+	//submit := r.FormValue("submit")
+	//fmt.Println(submit)
+	submit := r.FormValue("title")
+	fmt.Println(submit)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
