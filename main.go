@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"log"
+	"fmt"
 	"net/http"
 )
 
@@ -28,8 +29,27 @@ func main() {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "html/templates/index.html"
-
 	tmpl, err := template.ParseFiles(fp)
+
+	submit := r.FormValue("light1")
+	fmt.Println(submit)
+
+	light2 := r.FormValue("light2")
+	fmt.Println(light2)
+
+
+	if submit == "true" {
+		fmt.Println("light1 is: true")
+	} else {
+		fmt.Println("light1 is: false")
+	}
+
+	if light2 == "true" {
+		fmt.Println("light2 is: true")
+	} else {
+		fmt.Println("light2 is: false")
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}

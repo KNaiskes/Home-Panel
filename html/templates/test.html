@@ -1,8 +1,7 @@
-body {
-	color: red;
-}
+<!DOCTYPE html>
+<html>
 
-/* Toggles */
+<style>
 .switch {
   position: relative;
   display: inline-block;
@@ -50,6 +49,7 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+/* Rounded sliders */
 .slider.round {
   border-radius: 34px;
 }
@@ -57,4 +57,29 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+</style>
 
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="html/static/index.css">
+		<title> Test </title>
+	</head>
+
+	<body>
+		<p>
+		<center> <h4> TEST TEST </h4></center>
+		</p>
+
+		<form  method="POST">
+	<div><span>Title: </span><textarea name="title" placeholder="Link">Testing</textarea></div>
+	<div>
+	    <button type="submit" value="submit1" name="submit">1</button>
+	    <button type="submit" value="submit2" name="submit">2</button>
+	</div>
+	</form>
+
+
+
+	</body>
+
+</html>
