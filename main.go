@@ -25,8 +25,6 @@ type TemperatureHum struct {
 
 func main() {
 
-	SendMQTT("ls")
-
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
@@ -43,25 +41,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "html/templates/index.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	submit := r.FormValue("light1")
-	fmt.Println(submit)
-
-	light2 := r.FormValue("light2")
-	fmt.Println(light2)
-
-
-	if submit == "true" {
-		fmt.Println("light1 is: true")
-	} else {
-		fmt.Println("light1 is: false")
-	}
-
-	if light2 == "true" {
-		fmt.Println("light2 is: true")
-	} else {
-		fmt.Println("light2 is: false")
-	}
-
+	
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -102,6 +82,25 @@ func temphumiHandler(w http.ResponseWriter, r *http.Request) {
 
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "html/templates/dashboard.html"
+
+	submit := r.FormValue("light1")
+	fmt.Println(submit)
+
+	light2 := r.FormValue("light2")
+	fmt.Println(light2)
+
+
+	if submit == "true" {
+		fmt.Println("light1 is: true")
+	} else {
+		fmt.Println("light1 is: false")
+	}
+
+	if light2 == "true" {
+		fmt.Println("light2 is: true")
+	} else {
+		fmt.Println("light2 is: false")
+	}
 
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
