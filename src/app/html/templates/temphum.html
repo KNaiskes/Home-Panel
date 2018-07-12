@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="html/static/temphum.css">
+		<title> {{ .Title }} </title>
+	</head>
+
+	<body>
+		<p>
+		<center> <h4> temperature humidity </h4></center>
+		</p>
+		<p>
+		<table>
+			<tr>
+				<th> Time/Date </th>
+				{{ range $key, $value := .Temperature }}
+				<td> {{ $value }} </td>
+				{{ end }}
+			</tr>
+			<th> other </th>
+			{{ range $key, $value := .DateTime }}
+			<td> {{ $value }} </td>
+			{{ end }}
+		</table>
+	</body>
+
+</html>
