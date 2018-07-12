@@ -31,8 +31,8 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/tempHum", temphumiHandler)
-	http.Handle("html/static/", http.StripPrefix("html/static/",
-		http.FileServer(http.Dir("html/static/"))))
+	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
+		http.FileServer(http.Dir("src/app/html/static/"))))
 
 	http.ListenAndServe(":8080", nil)
 
