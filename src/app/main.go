@@ -5,18 +5,8 @@ import (
 	"log"
 	"fmt"
 	"net/http"
-	"os/exec"
 	"app/mqtt"
 )
-
-func SendMQTT(command string) {
-	cmd := exec.Command(command)
-	out, err := cmd.Output()
-	if err != nil {
-		log.Fatal("Failed with error: ", err)
-	}
-	fmt.Println(string(out)) // just for testing
-}
 
 type TemperatureHum struct {
 	Title string
@@ -25,7 +15,6 @@ type TemperatureHum struct {
 }
 
 func main() {
-	mqtt.SendMQTT("ls")
 
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
@@ -37,7 +26,6 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 
 }
-
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/index.html"
@@ -84,25 +72,18 @@ func temphumiHandler(w http.ResponseWriter, r *http.Request) {
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/dashboard.html"
 
-	submit := r.FormValue("light1")
-	fmt.Println(submit)
+	light1 := r.FormValue("light1")
 
 	light2 := r.FormValue("light2")
-	fmt.Println(light2)
 
-
-	if submit == "true" {
+	if light1 == "true" {
 		fmt.Println("light1 is: true")
-	} else {
-		fmt.Println("light1 is: false")
+		mqtt.SendMQTT("light1", "ls")
 	}
-
 	if light2 == "true" {
 		fmt.Println("light2 is: true")
-	} else {
-		fmt.Println("light2 is: false")
+		mqtt.SendMQTT("light2", "ls")
 	}
-
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		log.Fatal(err)

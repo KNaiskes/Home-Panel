@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func SendMQTT(command string) {
+func SendMQTT(device string, command string) {
 	cmd := exec.Command(command)
 	out, err := cmd.Output()
 	if err != nil {
