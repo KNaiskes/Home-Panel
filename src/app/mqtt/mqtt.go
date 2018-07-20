@@ -1,16 +1,19 @@
 package mqtt
 
 import (
-	"fmt"
 	"os/exec"
-	"log"
 )
 
-func SendMQTT(device string, command string) {
-	cmd := exec.Command(command)
-	out, err := cmd.Output()
-	if err != nil {
-		log.Fatal("Failed with error: ", err)
+func SendMQTT(device string) {
+
+	switch device {
+		case "light1":
+			cmd := exec.Command("mosquitto_pub", "-m", "light1", "-t", "test")
+			cmd.Output()
+		case "light2":
+			cmd := exec.Command("mosquitto_pub", "-m", "light2", "-t", "test")
+			cmd.Output()
+
+		}
 	}
-	fmt.Println(string(out)) // just for testing
-}
+

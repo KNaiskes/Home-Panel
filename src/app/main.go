@@ -78,11 +78,11 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 
 	if light1 == "true" {
 		fmt.Println("light1 is: true")
-		mqtt.SendMQTT("light1", "ls")
+		mqtt.SendMQTT("light1")
 	}
 	if light2 == "true" {
 		fmt.Println("light2 is: true")
-		mqtt.SendMQTT("light2", "ls")
+		mqtt.SendMQTT("light2")
 	}
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
