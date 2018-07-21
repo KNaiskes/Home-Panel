@@ -4,14 +4,14 @@ import (
 	"os/exec"
 )
 
-func SendMQTT(command string) {
+func ChangeState(command string, topic string) {
 
 	switch command {
 		case "on":
-			cmd := exec.Command("mosquitto_pub", "-m", "on", "-t", "ledStrip")
+			cmd := exec.Command("mosquitto_pub", "-m", "on", "-t", topic)
 			cmd.Output()
 		case "off":
-			cmd := exec.Command("mosquitto_pub", "-m", "off", "-t", "ledStrip")
+			cmd := exec.Command("mosquitto_pub", "-m", "off", "-t", topic)
 			cmd.Output()
 	}
 
