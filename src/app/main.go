@@ -91,10 +91,10 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 	if ledStrip_state == "true" {
 		fmt.Println("ledStrip_state is true")
-		mqtt.SendMQTT("on")
+		mqtt.ChangeState("on", "ledStrip")
 	} else {
 		fmt.Println("ledStrip_state is false")
-		mqtt.SendMQTT("off")
+		mqtt.ChangeState("off", "ledStrip")
 	}
 
 	tmpl, err := template.ParseFiles(fp)
