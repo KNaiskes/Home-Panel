@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/tempHum", temphumiHandler)
+	http.HandleFunc("/ledstrip", ledStripHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -72,18 +73,30 @@ func temphumiHandler(w http.ResponseWriter, r *http.Request) {
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/dashboard.html"
 
-	light1 := r.FormValue("light1")
-
-	light2 := r.FormValue("light2")
-
-	if light1 == "true" {
-		fmt.Println("light1 is: true")
-		mqtt.SendMQTT("light1")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		log.Fatal(err)
 	}
-	if light2 == "true" {
-		fmt.Println("light2 is: true")
-		mqtt.SendMQTT("light2")
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+}
+
+func ledStripHandler(w http.ResponseWriter, r *http.Request) {
+	fp := "src/app/html/templates/ledstrip.html"
+
+	ledStrip_state := r.FormValue("light1")
+
+	if ledStrip_state == "true" {
+		fmt.Println("ledStrip_state is true")
+		mqtt.SendMQTT("on")
+	} else {
+		fmt.Println("ledStrip_state is false")
+		mqtt.SendMQTT("off")
+	}
+
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		log.Fatal(err)

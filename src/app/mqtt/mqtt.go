@@ -4,16 +4,15 @@ import (
 	"os/exec"
 )
 
-func SendMQTT(device string) {
+func SendMQTT(command string) {
 
-	switch device {
-		case "light1":
-			cmd := exec.Command("mosquitto_pub", "-m", "light1", "-t", "test")
+	switch command {
+		case "on":
+			cmd := exec.Command("mosquitto_pub", "-m", "on", "-t", "ledStrip")
 			cmd.Output()
-		case "light2":
-			cmd := exec.Command("mosquitto_pub", "-m", "light2", "-t", "test")
+		case "off":
+			cmd := exec.Command("mosquitto_pub", "-m", "off", "-t", "ledStrip")
 			cmd.Output()
-
-		}
 	}
 
+}
