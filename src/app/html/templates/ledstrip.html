@@ -10,14 +10,32 @@
 		<p>
 		<center> <h4> Led strip settings </h4></center>
 		<!-- Led strip toggle. Values will be stored in a db later on -->
-		<form method="POST">
+		<form method="POST"> 
 		<label class="switch">
-			<input type="checkbox" name="light1" value="true">
+			<input type="checkbox" name="light1" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
+			<select name="ledStrip_Color">
+				<option value="red"> Red </option>
+				<option value="blue"> Blue </option>
+			</select>
 			<button type="submit" value="submit1" name="submit1">Save</button>
 		</form>
 		</p>
+
+		<p>
+		<h4> Select color </h4>
+		<!--
+		<form method="POST"> 
+			<select name="ledStrip_Color">
+				<option value="red"> Red </option>
+				<option value="blue"> Blue </option>
+			</select>
+			<button type="submit" value="colorSubmit" name="colorSubmit">Change color</button>
+		</form>
+		-->
+		</p>
+
 	</body>
 
 </html>

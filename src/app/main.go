@@ -14,6 +14,11 @@ type TemperatureHum struct {
 	Temperature []string
 }
 
+type LedStrip struct {
+	State string
+	Color string
+}
+
 func main() {
 
 	http.HandleFunc("/", indexHandler)
@@ -85,23 +90,34 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
+	State := "true" // will be read from db later 
+	Color := "blue" // will be read from db later
+	page := LedStrip{State, Color}
 	fp := "src/app/html/templates/ledstrip.html"
 
+	topic := "ledStrip"
 	ledStrip_state := r.FormValue("light1")
+	ledStrip_color := r.FormValue("ledStrip_Color")
 
 	if ledStrip_state == "true" {
 		fmt.Println("ledStrip_state is true")
-		mqtt.ChangeState("on", "ledStrip")
+		mqtt.ChangeState("on",topic)
 	} else {
 		fmt.Println("ledStrip_state is false")
-		mqtt.ChangeState("off", "ledStrip")
+		mqtt.ChangeState("off",topic)
 	}
+
+	if ledStrip_color != "" {
+		mqtt.ChangeColor(ledStrip_color,topic)
+	}
+
+	fmt.Println("The selected color is :", ledStrip_color)
 
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, page)
 	if err != nil {
 		log.Fatal(err)
 	}
