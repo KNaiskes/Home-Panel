@@ -1,5 +1,5 @@
 body {
-	color: blue;
+	background-color: #F8F8FA
 }
 
 /* Toggles */
@@ -19,7 +19,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #DBDBDB;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -37,7 +37,7 @@ body {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #00CC66;
 }
 
 input:focus + .slider {
@@ -56,5 +56,40 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+input[type=submit]{
+	background-color: #51798F;
+	color: white;
+	padding: 14px 20px;
+	margin: 20px 100px 50px;
+	border: none;
+	cursor: pointer;
+	display: block;
+	width: 300px;
+	font-size: 18px;
+}
+
+select {
+	background-color: #327BAB;
+	color: white;
+	font-size: 20px;
+	padding: 10px 0;
+	margin 20px 0 0;
+	border-radius: 2px;
+	width: 300px;
+	display: block;
+	border: none;
+	appearance: none;
+	-moz-appearance:none; 
+    	-webkit-appearance:none;
+
+}
+
+#formPosition {
+	background-color: #b3cde0;
+	margin: 150px 100px 100px;
+	border: 1px solid #F7F7F7;
+	font-size: 20px;
 }
 
