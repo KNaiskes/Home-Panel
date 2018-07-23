@@ -10,22 +10,47 @@
 		<p>
 		<center> <h4> Led strip settings </h4></center>
 		<!-- Led strip toggle. Values will be stored in a db later on -->
+		<div id="formPosition">
+			<center>
+			<br>
 		<form method="POST"> 
 		<label class="switch">
-			<input type="checkbox" name="light1" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
+			<input id="state" type="checkbox" name="light1" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
 			<select name="ledStrip_Color">
+				<option value="white"> White </option>
 				<option value="red"> Red </option>
 				<option value="blue"> Blue </option>
+				<option value="orange"> Orange </option>
+				<option value="yellow"> Yellow </option>
+				<option value="dark_yellow"> Dark Yellow </option>
+				<option value="yellow2"> Yellow2 </option>
+				<option value="green"> Green </option>
+				<option value="pea"> Pea </option>
+				<option value="cyan"> Cyan </option>
+				<option value="light_blue"> Light Blue </option>
+				<option value="sky_blue"> Sky Blue </option>
+				<option value="Blue"> Blue </option>
+				<option value="dark_blue"> Dark Blue </option>
+				<option value="purple"> Purple </option>
+				<option value="violet"> Violet  </option>
+				<option value="Pink"> Pink </option>
+				<option value="flash"> Flash </option>
+				<option value="strobe"> Strobe </option>
+				<option value="fade"> Fade </option>
+				<option value="smooth"> Smooth </option>
+				
 			</select>
-			<button type="submit" value="submit1" name="submit1">Save</button>
+			<input class="btn btn-default" type="submit" value="Save">
 		</form>
+		</div>
+			</center>
 		</p>
 
 		<p>
-		<h4> Select color </h4>
 		<!--
+		<h4> Select color </h4>
 		<form method="POST"> 
 			<select name="ledStrip_Color">
 				<option value="red"> Red </option>
