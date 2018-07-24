@@ -61,8 +61,8 @@ input:checked + .slider:before {
 input[type=submit]{
 	background-color: #51798F;
 	color: white;
-	padding: 14px 20px;
-	margin: 20px 100px 50px;
+	padding: 10px 0;
+	margin: 20px 0 50px;
 	border: none;
 	cursor: pointer;
 	display: block;
@@ -83,12 +83,12 @@ select {
 	appearance: none;
 	-moz-appearance:none; 
     	-webkit-appearance:none;
-
 }
 
 #formPosition {
 	background-color: #b3cde0;
-	margin: 150px 100px 100px;
+	margin: 150px auto auto ;
+	width: auto;
 	border: 1px solid #F7F7F7;
 	font-size: 20px;
 }
