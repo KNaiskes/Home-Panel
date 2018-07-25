@@ -8,14 +8,15 @@
 
 	<body>
 		<p>
-		<center> <h4> Led strip settings </h4></center>
+		<!-- if ever add more led strips, they should be added in a list -->
+		<center> <h3><i> Bedroom led strip </i></h3></center>
 		<!-- Led strip toggle. Values will be stored in a db later on -->
 		<div id="formPosition">
 			<center>
 			<br>
 		<form method="POST"> 
 		<label class="switch">
-			<input id="state" type="checkbox" name="light1" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
+			<input id="state" type="checkbox" name="led_strip" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
 			<select name="ledStrip_Color">
