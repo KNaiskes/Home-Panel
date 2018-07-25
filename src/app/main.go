@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/temperature_humidity", temperatureHumidityHandler)
 	http.HandleFunc("/ledstrip", ledStripHandler)
+	http.HandleFunc("/lights", lightsHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -122,3 +123,17 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 }
+
+func lightsHandler(w http.ResponseWriter, r *http.Request) {
+	fp := "src/app/html/templates/lights.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
