@@ -24,7 +24,7 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
-	http.HandleFunc("/tempHum", temphumiHandler)
+	http.HandleFunc("/temperature_humidity", temperatureHumidityHandler)
 	http.HandleFunc("/ledstrip", ledStripHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
@@ -59,7 +59,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func temphumiHandler(w http.ResponseWriter, r *http.Request) {
+func temperatureHumidityHandler(w http.ResponseWriter, r *http.Request) {
 	DateTime := []string {"20","29", "40"} //just for testing
 	Temperature := []string {"18-06-26", "18-06-26", "18-06-26"} //just for testing
 	page := TemperatureHum{"Temperature/Humidity", DateTime, Temperature}
@@ -96,7 +96,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/ledstrip.html"
 
 	topic := "ledStrip"
-	ledStrip_state := r.FormValue("light1")
+	ledStrip_state := r.FormValue("led_strip")
 	ledStrip_color := r.FormValue("ledStrip_Color")
 
 	if ledStrip_state == "true" {
