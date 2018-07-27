@@ -19,6 +19,10 @@ type LedStrip struct {
 	Color string
 }
 
+type Lights struct {
+	Mylights map[string]string
+}
+
 func main() {
 
 	http.HandleFunc("/", indexHandler)
@@ -125,13 +129,55 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
+	Mylights := map[string]string{"office_lamp":"false", "desk_lamp":"false"}
+
+	page := Lights{Mylights}
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
+
+	topic := "officeLamp"
+
+
+	office := r.FormValue("office_lamp")
+	desk := r.FormValue("desk_lamp")
+
+	if office  == "true" {
+		fmt.Println("true!!!!")
+		mqtt.ChangeState("on", topic)
+	} else {
+		fmt.Println("false!!!")
+		mqtt.ChangeState("off", topic)
+	}
+
+
+	//if val, ok := Mylights["office_lamp"]; ok {
+	//	fmt.Println("value was found at: ")
+	//	fmt.Println(val)
+	//	fmt.Println(ok)
+	//	mqtt.ChangeState("on", topic)
+	//} else {
+	//	fmt.Println("gone in else")
+	//	mqtt.ChangeState("off", topic)
+	//}
+
+//	for value, light := range Mylights {
+//		getValue := r.FormValue(value)
+//		fmt.Println(getValue)
+//		fmt.Println("light:", light)
+//
+//		if getValue == "true" {
+//			mqtt.ChangeState("on", topic)
+//			fmt.Println("if :", getValue)
+//		} else {
+//			mqtt.ChangeState("off", topic)
+//			fmt.Println("else :", getValue)
+//		}
+//	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, page)
 	if err != nil {
 		log.Fatal(err)
 	}
