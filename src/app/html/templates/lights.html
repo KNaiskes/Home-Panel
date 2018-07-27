@@ -16,12 +16,12 @@
 		<ul>
 			<p><b> Office lamp </b></p>
 		<label class="switch">
-			<input id="state" type="checkbox" name="office_lamp" value="true" checked="checked"> 
+			<input id="state" type="checkbox" name="office_lamp" value="true" {{if eq (index .Mylights "office_lamp" ) "true"}}checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
 		<p><b> Desk lamp </b></p>
 		<label class="switch">
-			<input id="state" type="checkbox" name="desk_lamp" value="true" checked="checked"> 
+			<input id="state" type="checkbox" name="desk_lamp" value="true" {{if eq (index .Mylights "desk_lamp" ) "true"}}checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
 		</ul>
