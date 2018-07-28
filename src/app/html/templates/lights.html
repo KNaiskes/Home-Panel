@@ -14,16 +14,15 @@
 			<br>
 		<form method="POST"> 
 		<ul>
-			<p><b> Office lamp </b></p>
+			{{range $n := .}}
+			<p><b> {{$n.Name}} </b></p>
 		<label class="switch">
-			<input id="state" type="checkbox" name="office_lamp" value="true" {{if eq (index .Mylights "office_lamp" ) "true"}}checked="checked"{{end}}> 
+			<input id={{$n.Name}} type="checkbox" name={{$n.Name}}
+					value="true" {{if (eq $n.State "true")}}
+					checked="checked"{{end}}>
 			<span class="slider round"></span>
 		</label>
-		<p><b> Desk lamp </b></p>
-		<label class="switch">
-			<input id="state" type="checkbox" name="desk_lamp" value="true" {{if eq (index .Mylights "desk_lamp" ) "true"}}checked="checked"{{end}}> 
-			<span class="slider round"></span>
-		</label>
+		{{end}}
 		</ul>
 			<input class="btn btn-default" type="submit" value="Save">
 		</form>
