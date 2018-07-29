@@ -20,9 +20,10 @@ type LedStrip struct {
 }
 
 type Lights struct {
-	Name string
-	State string
-	Topic string
+	DisplayName string
+	Name	    string
+	State       string
+	Topic       string
 }
 
 func main() {
@@ -132,8 +133,8 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
 
-	officeLamp := Lights{"office_lamp", "true", "officeLamp"}
-	DeskLamp := Lights{"desk_lamp", "false", "deskLamp"}
+	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "ledStrip"}
+	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
 	page := []Lights{officeLamp, DeskLamp}
 
 	fp := "src/app/html/templates/lights.html"
