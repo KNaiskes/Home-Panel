@@ -15,7 +15,7 @@
 		<form method="POST"> 
 		<ul>
 			{{range $n := .}}
-			<p><b> {{$n.Name}} </b></p>
+			<p><b> {{$n.DisplayName}} </b></p>
 		<label class="switch">
 			<input id={{$n.Name}} type="checkbox" name={{$n.Name}}
 					value="true" {{if (eq $n.State "true")}}
