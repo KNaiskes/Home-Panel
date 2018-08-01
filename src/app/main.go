@@ -133,7 +133,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
 
-	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "ledStrip"}
+	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "officeLamp"}
 	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
 	page := []Lights{officeLamp, DeskLamp}
 
