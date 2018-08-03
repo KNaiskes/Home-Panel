@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"fmt"
+	"time"
 	"net/http"
 	"app/mqtt"
 )
@@ -27,7 +28,7 @@ type Lights struct {
 }
 
 func main() {
-
+	go mqtt.RunEvery(10*time.Second, mqtt.Dht22Sensor)
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
