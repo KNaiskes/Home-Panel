@@ -6,6 +6,9 @@ import (
 	"os"
 	"time"
 	"log"
+	"bufio"
+	"strconv"
+	"strings"
 )
 
 func ChangeState(command string, topic string) {
@@ -32,9 +35,26 @@ func RunEvery(d time.Duration, f func(time.Time)) {
 	}
 }
 
+func MakeFloats(textFile string) {
+	floats := []float64 {}
+	file, _ := os.Open(textFile)
+	fileScanner := bufio.NewScanner(file)
+
+	for fileScanner.Scan() {
+		trimmed := strings.TrimSpace(fileScanner.Text())
+		f, er := strconv.ParseFloat(trimmed, 64)
+		if er == nil {
+			floats = append(floats, f)
+		}
+	}
+		//TODO return slice or saving it to db instead of printing it
+		fmt.Println("Floats: ", floats)
+}
+
 func Dht22Sensor(t time.Time) {
-	tempFile := "temperatureHUm.txt"
+	tempFile := "temperatureHum.txt"
 	topic := "tempHum"
+	MakeFloats(tempFile)
 	cmd := exec.Command("mosquitto_sub", "-t", topic)
 	outfile, err := os.Create(tempFile)
 	if err != nil {
@@ -42,12 +62,13 @@ func Dht22Sensor(t time.Time) {
 	}
 	defer outfile.Close()
 	cmd.Stdout = outfile
-	fmt.Println("here!!!")
+
+	time.Sleep(10 * time.Second)
 	if err := cmd.Start(); err != nil {
 		log.Fatal(err)
 	}
 	time.Sleep(20 * time.Second)
-	os.Remove(tempFile)
+	//os.Remove(tempFile)
 
 }
 

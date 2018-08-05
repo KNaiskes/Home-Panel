@@ -29,6 +29,7 @@ type Lights struct {
 
 func main() {
 	go mqtt.RunEvery(10*time.Second, mqtt.Dht22Sensor)
+	//go mqtt.MakeFloats("temperatureHum.txt")
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
