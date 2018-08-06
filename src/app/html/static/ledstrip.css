@@ -2,6 +2,12 @@ body {
 	background-color: #F8F8FA
 }
 
+a { 
+	color: #000000;
+	text-decoration: none;
+}
+
+
 /* Toggles */
 .switch {
   position: relative;
