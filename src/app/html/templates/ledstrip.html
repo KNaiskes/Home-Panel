@@ -17,11 +17,16 @@
 			<center>
 			<br>
 		<form method="POST"> 
+			<ul>
+				{{range $n := .}}
+				<p><b> {{$n.DisplayName}} </b></p>
 		<label class="switch">
-			<input id="state" type="checkbox" name="led_strip" value="true" {{if (eq .State "true")}}checked="checked"{{end}}> 
+			<input id={{$n.Name}} type="checkbox" name={{$n.Name}} 
+					value="true" {{if (eq $n.State "true")}}
+					checked="checked"{{end}}> 
 			<span class="slider round"></span>
 		</label>
-			<select name="ledStrip_Color">
+				<select name={{$n.Color}}>
 				<option value="white"> White </option>
 				<option value="red"> Red </option>
 				<option value="blue"> Blue </option>
@@ -45,6 +50,7 @@
 				<option value="smooth"> Smooth </option>
 				
 			</select>
+			{{end}}
 			<input class="btn btn-default" type="submit" value="Save">
 		</form>
 		</div>
