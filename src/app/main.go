@@ -6,22 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"app/mqtt"
+	"app/devices"
 )
 
-type LedStrip struct {
-	DisplayName string
-	Name	    string
-	State	    string
-	Color       string
-	Topic	    string
-}
 
-type Lights struct {
-	DisplayName string
-	Name	    string
-	State       string
-	Topic       string
-}
 
 func main() {
 	http.HandleFunc("/", indexHandler)
@@ -77,13 +65,10 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
-	bedroomLedstrip := LedStrip{"Bedroom", "bedroom_ledstrip", "false",
-				   "white", "ledStrip"}
-	MyledStrips := []LedStrip{bedroomLedstrip}
 
 	fp := "src/app/html/templates/ledstrip.html"
 
-	for _, ledstrip := range MyledStrips {
+	for _, ledstrip := range devices.GetLedstrips() {
 		ledstrip_state := r.FormValue(ledstrip.Name)
 		ledstrip_color := r.FormValue(ledstrip.Color)
 
@@ -105,7 +90,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, MyledStrips)
+	err = tmpl.Execute(w, devices.GetLedstrips())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -113,14 +98,11 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
 
-	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "officeLamp"}
-	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
-	page := []Lights{officeLamp, DeskLamp}
 
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	for _, light := range page {
+	for _, light := range devices.GetLights() {
 		light_state := r.FormValue(light.Name)
 
 		if light_state == "true" {
@@ -133,7 +115,7 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, devices.GetLights())
 	if err != nil {
 		log.Fatal(err)
 	}
