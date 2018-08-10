@@ -9,8 +9,11 @@ import (
 )
 
 type LedStrip struct {
-	State string
-	Color string
+	DisplayName string
+	Name	    string
+	State	    string
+	Color       string
+	Topic	    string
 }
 
 type Lights struct {
@@ -74,34 +77,35 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
-	State := "true" // will be read from db later 
-	Color := "blue" // will be read from db later
-	page := LedStrip{State, Color}
+	bedroomLedstrip := LedStrip{"Bedroom", "bedroom_ledstrip", "false",
+				   "white", "ledStrip"}
+	MyledStrips := []LedStrip{bedroomLedstrip}
+
 	fp := "src/app/html/templates/ledstrip.html"
 
-	topic := "ledStrip"
-	ledStrip_state := r.FormValue("led_strip")
-	ledStrip_color := r.FormValue("ledStrip_Color")
+	for _, ledstrip := range MyledStrips {
+		ledstrip_state := r.FormValue(ledstrip.Name)
+		ledstrip_color := r.FormValue(ledstrip.Color)
 
-	if ledStrip_state == "true" {
-		fmt.Println("ledStrip_state is true")
-		mqtt.ChangeState("on",topic)
-	} else {
-		fmt.Println("ledStrip_state is false")
-		mqtt.ChangeState("off",topic)
+		if ledstrip_state == "true" {
+			mqtt.ChangeState("on", ledstrip.Topic)
+		} else {
+			mqtt.ChangeState("off", ledstrip.Topic)
+		}
+		fmt.Println("State:", ledstrip.State)
+
+		if ledstrip_color != "" {
+			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
+		}
+		fmt.Println("Color :", ledstrip_color)
+
 	}
-
-	if ledStrip_color != "" {
-		mqtt.ChangeColor(ledStrip_color,topic)
-	}
-
-	fmt.Println("The selected color is :", ledStrip_color)
 
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, page)
+	err = tmpl.Execute(w, MyledStrips)
 	if err != nil {
 		log.Fatal(err)
 	}
