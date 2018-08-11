@@ -13,8 +13,9 @@ import (
 
 
 func main() {
-	database.CreateDB()
-	database.InsertAll()
+	//database.CreateDB()
+	//database.InsertAll()
+	database.DBexists()
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
@@ -100,8 +101,6 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
-
-
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
 
