@@ -1,1 +1,3 @@
 bin/app
+pkg/
+src/github.com

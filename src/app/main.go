@@ -7,11 +7,14 @@ import (
 	"net/http"
 	"app/mqtt"
 	"app/devices"
+	"app/database"
 )
 
 
 
 func main() {
+	database.CreateDB()
+	database.InsertAll()
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
