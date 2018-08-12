@@ -68,14 +68,13 @@ func InsertAll() {
 	}
 }
 
-func GetlightState() (string, string){
+func GetlightState() { 
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	const getLightState = "SELECT name, state FROM lights"
-	LightsStates := []devices.Lights
 
 	//getLighStateStatement, err := db.Prepare(getLightState)
 	rows, err := db.Query(getLightState)
