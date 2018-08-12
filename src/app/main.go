@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"app/mqtt"
-	"app/devices"
 	"app/database"
 )
 
@@ -72,7 +71,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 	fp := "src/app/html/templates/ledstrip.html"
 
-	for _, ledstrip := range devices.GetLedstrips() {
+	for _, ledstrip := range database.InsertKnownLedstrips() {
 		ledstrip_state := r.FormValue(ledstrip.Name)
 		ledstrip_color := r.FormValue(ledstrip.Color)
 
@@ -94,7 +93,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, devices.GetLedstrips())
+	err = tmpl.Execute(w, database.InsertKnownLedstrips())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -104,7 +103,7 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	for _, light := range devices.GetLights() {
+	for _, light := range database.InsertKnownLights() {
 		light_state := r.FormValue(light.Name)
 
 		if light_state == "true" {
@@ -117,7 +116,7 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, devices.GetLights())
+	err = tmpl.Execute(w, database.InsertKnownLights())
 	if err != nil {
 		log.Fatal(err)
 	}

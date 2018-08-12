@@ -3,19 +3,57 @@ package database
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"app/devices"
 	"log"
 	"os"
 )
 
+type LedStrip struct {
+	DisplayName string
+	Name	    string
+	State	    string
+	Color       string
+	Topic	    string
+}
+
+type Lights struct {
+	DisplayName string
+	Name	    string
+	State       string
+	Topic       string
+}
+
 const dbDir = "src/app/db/"
 const dbName = dbDir + "home.db"
+
+
+func InsertKnownLedstrips() []LedStrip {
+	//Already known led strips that will be added only when database is
+	//lost or about to be created
+	//Add any new led strips below
+	bedroomLedstrip := LedStrip{"Bedroom", "bedroom_ledstrip", "false",
+				   "white", "ledStrip"}
+
+	MyledStrips := []LedStrip{bedroomLedstrip}
+
+	return MyledStrips
+}
+
+func InsertKnownLights() []Lights {
+	//Already known lights that will be added only when database is lost
+	//or about to be created
+	//Add any new light below
+	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "officeLamp"}
+	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
+	MyLights := []Lights{officeLamp, DeskLamp}
+
+	return MyLights
+}
 
 func DBexists() {
 	if _, err := os.Stat(dbName); os.IsNotExist(err) {
 		os.MkdirAll(dbDir, 0700)
 		CreateDB()
-		InsertAll()
+		//InsertAll()
 	}
 }
 
@@ -57,18 +95,18 @@ func InsertAll() {
 	const insertLight = "INSERT INTO lights (name, state) VALUES (? , ?)"
 	const insertLedstrip = "INSERT INTO ledstrips (name, color, state) VALUES (?, ?,?)"
 
-	for _, light := range devices.GetLights() {
+	for _, light := range InsertKnownLights() {
 		lightStatement, _ := db.Prepare(insertLight)
 		lightStatement.Exec(light.Name, light.State)
 	}
 
-	for _, ledstrip := range devices.GetLedstrips() {
+	for _, ledstrip := range InsertKnownLedstrips() {
 		ledstripStatement, _ := db.Prepare(insertLedstrip)
 		ledstripStatement.Exec(ledstrip.Name, ledstrip.Color, ledstrip.State)
 	}
 }
 
-func GetlightState() { 
+func GetlightState() {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
@@ -106,7 +144,7 @@ func GetlightState() {
 
 }
 
-func UpdateLights(light devices.Lights, state string) {
+func UpdateLights(light Lights, state string) {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
