@@ -5,6 +5,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
+	"fmt"
 )
 
 type LedStrip struct {
@@ -53,7 +54,7 @@ func DBexists() {
 	if _, err := os.Stat(dbName); os.IsNotExist(err) {
 		os.MkdirAll(dbDir, 0700)
 		CreateDB()
-		//InsertAll()
+		InsertAll()
 	}
 }
 
@@ -69,7 +70,8 @@ func CreateDB() {
 
 	const ledstripsTable = `CREATE TABLE IF NOT EXISTS
 			       ledstrips(id INTEGER PRIMARY KEY,
-			       name TEXT, color TEXT, state TEXT)`
+			       displayname TEXT, name TEXT, state TEXT,
+			       color TEXT, topic TEXT)`
 
 	statement, err := db.Prepare(lightsTable)
 	if err != nil {
@@ -93,7 +95,8 @@ func InsertAll() {
 	}
 
 	const insertLight = "INSERT INTO lights (name, state) VALUES (? , ?)"
-	const insertLedstrip = "INSERT INTO ledstrips (name, color, state) VALUES (?, ?,?)"
+	const insertLedstrip = `INSERT INTO ledstrips (displayname, name,
+				state, color, topic) VALUES (?, ?, ?, ?, ?)`
 
 	for _, light := range InsertKnownLights() {
 		lightStatement, _ := db.Prepare(insertLight)
@@ -102,7 +105,9 @@ func InsertAll() {
 
 	for _, ledstrip := range InsertKnownLedstrips() {
 		ledstripStatement, _ := db.Prepare(insertLedstrip)
-		ledstripStatement.Exec(ledstrip.Name, ledstrip.Color, ledstrip.State)
+		ledstripStatement.Exec(ledstrip.DisplayName, ledstrip.Name,
+				       ledstrip.State, ledstrip.Color,
+				       ledstrip.Topic)
 	}
 }
 
@@ -152,6 +157,49 @@ func UpdateLights(light Lights, state string) {
 
 	const updateLight = "UPDATE lights SET state = ? WHERE NAME = ?"
 
-	updateLightStatement, _ := db.Prepare(updateLight)
+	updateLightStatement, err := db.Prepare(updateLight)
+	if err != nil {
+		log.Fatal(err)
+	}
 	updateLightStatement.Exec(state, light.Name)
+}
+
+func UpdateLedstrip(name string, color string, state string) {
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const updateLedstrip = `UPDATE ledstrips SET state = ?, color = ?
+	                        WHERE name = ?`
+	updateLedstripStatement, err := db.Prepare(updateLedstrip)
+	updateLedstripStatement.Exec(state, color, name)
+}
+
+func DBledstrips() []LedStrip {
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var displayName string
+	var name string
+	var state string
+	var color string
+	var topic string
+
+	MyLedstrips := []LedStrip{}
+
+	const getLedstrips = `SELECT displayname, name, state, color, topic
+			     FROM ledstrips`
+	rows, err := db.Query(getLedstrips)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		rows.Scan(&displayName, &name, &state, &color, &topic)
+		temp := LedStrip{displayName, name, state, color, topic}
+		MyLedstrips = append(MyLedstrips, temp)
+	}
+	fmt.Println("MyLedstrips:", MyLedstrips)
+	return MyLedstrips
 }
