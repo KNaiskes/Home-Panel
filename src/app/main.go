@@ -71,18 +71,21 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 
 	fp := "src/app/html/templates/ledstrip.html"
 
-	for _, ledstrip := range database.InsertKnownLedstrips() {
+	for _, ledstrip := range database.DBledstrips() {
 		ledstrip_state := r.FormValue(ledstrip.Name)
 		ledstrip_color := r.FormValue(ledstrip.Color)
 
 		if ledstrip_state == "true" {
+			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "true")
 			mqtt.ChangeState("on", ledstrip.Topic)
 		} else {
+			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "false")
 			mqtt.ChangeState("off", ledstrip.Topic)
 		}
 		fmt.Println("State:", ledstrip.State)
 
 		if ledstrip_color != "" {
+			database.UpdateLedstrip(ledstrip.Name, ledstrip_color, ledstrip_state)
 			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
 		}
 		fmt.Println("Color :", ledstrip_color)
@@ -93,7 +96,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, database.InsertKnownLedstrips())
+	err = tmpl.Execute(w, database.DBledstrips())
 	if err != nil {
 		log.Fatal(err)
 	}
