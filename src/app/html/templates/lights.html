@@ -18,15 +18,15 @@
 		<ul>
 			{{range $n := .}}
 			<p><b> {{$n.DisplayName}} </b></p>
-		<label class="switch">
-			<input id={{$n.Name}} type="checkbox" name={{$n.Name}}
-					value="true" {{if (eq $n.State "true")}}
-					checked="checked"{{end}}>
-			<span class="slider round"></span>
-		</label>
-		{{end}}
+
+			<button type="submit" id={{$n.Name}} name={{$n.Name}}
+				value="true"> On </button>
+			<hr>
+			<button type="submit" id={{$n.Name}} name={{$n.Name}}
+				value="false"> Off </button>
+
+			{{end}}
 		</ul>
-			<input class="btn btn-default" type="submit" value="Save">
 		</form>
 		</div>
 			</center>

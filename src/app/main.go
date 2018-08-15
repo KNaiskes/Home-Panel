@@ -12,8 +12,6 @@ import (
 
 
 func main() {
-	//database.CreateDB()
-	//database.InsertAll()
 	database.DBexists()
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
@@ -106,12 +104,14 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	for _, light := range database.InsertKnownLights() {
+	for _, light := range database.DBlights() {
 		light_state := r.FormValue(light.Name)
 
 		if light_state == "true" {
+			database.UpdateLights(light.Name, light_state)
 			mqtt.ChangeState("on", light.Topic)
-		} else {
+		} else if light_state == "false" {
+			database.UpdateLights(light.Name, light_state)
 			mqtt.ChangeState("off", light.Topic)
 		}
 	}
@@ -119,7 +119,7 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, database.InsertKnownLights())
+	err = tmpl.Execute(w, database.DBlights())
 	if err != nil {
 		log.Fatal(err)
 	}
