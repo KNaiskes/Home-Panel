@@ -78,7 +78,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		if ledstrip_state == "true" {
 			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "true")
 			mqtt.ChangeState("on", ledstrip.Topic)
-		} else {
+		} else if ledstrip_state == "false" {
 			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "false")
 			mqtt.ChangeState("off", ledstrip.Topic)
 		}

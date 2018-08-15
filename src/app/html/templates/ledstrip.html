@@ -10,9 +10,7 @@
 
 	<body>
 		<p>
-		<!-- if ever add more led strips, they should be added in a list -->
 		<center> <h3><i> Bedroom led strip </i></h3></center>
-		<!-- Led strip toggle. Values will be stored in a db later on -->
 		<div id="formPosition">
 			<center>
 			<br>
@@ -20,13 +18,13 @@
 			<ul>
 				{{range $n := .}}
 				<p><b> {{$n.DisplayName}} </b></p>
-		<label class="switch">
-			<input id={{$n.Name}} type="checkbox" name={{$n.Name}} 
-					value="true" {{if (eq $n.State "true")}}
-					checked="checked"{{end}}> 
-			<span class="slider round"></span>
-		</label>
-				<select name={{$n.Color}}>
+			<button type="submit" id={{$n.Name}} name={{$n.Name}}
+				value="true"> On </button>
+			<hr>
+			<button type="submit" id={{$n.Name}} name={{$n.Name}}
+				value="false"> Off </button>
+
+				<select name={{$n.Color}} onchange='this.form.submit()'>
 				<option value="white"> White </option>
 				<option value="red"> Red </option>
 				<option value="blue"> Blue </option>
@@ -39,7 +37,6 @@
 				<option value="cyan"> Cyan </option>
 				<option value="light_blue"> Light Blue </option>
 				<option value="sky_blue"> Sky Blue </option>
-				<option value="Blue"> Blue </option>
 				<option value="dark_blue"> Dark Blue </option>
 				<option value="purple"> Purple </option>
 				<option value="violet"> Violet  </option>
@@ -51,7 +48,6 @@
 				
 			</select>
 			{{end}}
-			<input class="btn btn-default" type="submit" value="Save">
 		</form>
 		</div>
 			</center>
