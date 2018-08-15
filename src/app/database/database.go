@@ -43,7 +43,7 @@ func InsertKnownLights() []Lights {
 	//Already known lights that will be added only when database is lost
 	//or about to be created
 	//Add any new light below
-	officeLamp := Lights{"Office Lamp", "office_lamp", "true", "officeLamp"}
+	officeLamp := Lights{"Office Lamp", "office_lamp", "false", "officeLamp"}
 	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
 	MyLights := []Lights{officeLamp, DeskLamp}
 
@@ -65,8 +65,8 @@ func CreateDB() {
 	}
 
 	const lightsTable = `CREATE TABLE IF NOT EXISTS 
-			     lights(id INTEGER PRIMARY KEY, 
-			     name TEXT, state TEXT)`
+			     lights(id INTEGER PRIMARY KEY, displayname TEXT,
+			     name TEXT, state TEXT, topic TEXT)`
 
 	const ledstripsTable = `CREATE TABLE IF NOT EXISTS
 			       ledstrips(id INTEGER PRIMARY KEY,
@@ -94,13 +94,14 @@ func InsertAll() {
 		log.Fatal(err)
 	}
 
-	const insertLight = "INSERT INTO lights (name, state) VALUES (? , ?)"
+	const insertLight = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
 	const insertLedstrip = `INSERT INTO ledstrips (displayname, name,
 				state, color, topic) VALUES (?, ?, ?, ?, ?)`
 
 	for _, light := range InsertKnownLights() {
 		lightStatement, _ := db.Prepare(insertLight)
-		lightStatement.Exec(light.Name, light.State)
+		lightStatement.Exec(light.DisplayName, light.Name,
+				    light.State, light.Topic)
 	}
 
 	for _, ledstrip := range InsertKnownLedstrips() {
@@ -111,13 +112,20 @@ func InsertAll() {
 	}
 }
 
-func GetlightState() {
+func DBlights() []Lights {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	const getLightState = "SELECT name, state FROM lights"
+	var displayname string
+	var name string
+	var state string
+	var topic string
+
+	Mylights := []Lights{}
+	const getLightState = `SELECT displayname, name, state, 
+			       topic FROM lights`
 
 	//getLighStateStatement, err := db.Prepare(getLightState)
 	rows, err := db.Query(getLightState)
@@ -125,43 +133,27 @@ func GetlightState() {
 		log.Fatal(err)
 	}
 
-	var name  string
-	var state string
-
 	for rows.Next() {
-		rows.Scan(&name, &state)
+		rows.Scan(&displayname, &name, &state, &topic)
+		temp := Lights{displayname, name, state, topic}
+		Mylights = append(Mylights, temp)
 	}
-
-	//for rows.Next() {
-	//	rows.Scan(&state)
-	//}
-	//fmt.Println("State: ", state)
-
-
-
-	//getLighStateStatement.Exec(light.Name)
-
-	//return currentState
-
-	//for rows.Next() {
-	//	rows.Scan(&name, &state)
-	//}
-
+	return Mylights
 }
 
-func UpdateLights(light Lights, state string) {
+func UpdateLights(name string, state string) {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	const updateLight = "UPDATE lights SET state = ? WHERE NAME = ?"
+	const updateLight = "UPDATE lights SET state = ? WHERE name = ?"
 
 	updateLightStatement, err := db.Prepare(updateLight)
 	if err != nil {
 		log.Fatal(err)
 	}
-	updateLightStatement.Exec(state, light.Name)
+	updateLightStatement.Exec(state, name)
 }
 
 func UpdateLedstrip(name string, color string, state string) {
@@ -172,6 +164,9 @@ func UpdateLedstrip(name string, color string, state string) {
 	const updateLedstrip = `UPDATE ledstrips SET state = ?, color = ?
 	                        WHERE name = ?`
 	updateLedstripStatement, err := db.Prepare(updateLedstrip)
+	if err != nil {
+		log.Fatal(err)
+	}
 	updateLedstripStatement.Exec(state, color, name)
 }
 
