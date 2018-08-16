@@ -18,11 +18,10 @@
 			<ul>
 				{{range $n := .}}
 				<p><b> {{$n.DisplayName}} </b></p>
-			<button type="submit" id={{$n.Name}} name={{$n.Name}}
-				value="true"> On </button>
-			<hr>
-			<button type="submit" id={{$n.Name}} name={{$n.Name}}
-				value="false"> Off </button>
+			<input type="submit" id={{$n.Name}} name={{$n.Name}}
+				{{if (eq $n.State "true")}}style="background-color:red;" value="false"
+				{{else}} style="background-color:green;" value="true"
+				{{end}}>
 
 				<select name={{$n.Color}} onchange='this.form.submit()'>
 				<option value="white"> White </option>
