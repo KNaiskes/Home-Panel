@@ -82,6 +82,9 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("State:", ledstrip.State)
 
+		if ledstrip_state == "" {
+			ledstrip_state = ledstrip.State
+		}
 		if ledstrip_color != "" {
 			database.UpdateLedstrip(ledstrip.Name, ledstrip_color, ledstrip_state)
 			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
