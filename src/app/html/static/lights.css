@@ -15,27 +15,13 @@ input[type=submit]{
 	background-color: #51798F;
 	color: white;
 	padding: 10px 0;
-	margin: 20px 0 50px;
+	margin: 4px 2px;
 	border: none;
 	cursor: pointer;
-	display: block;
-	width: 300px;
+	display: inline-block;
+	width: 100px;
 	font-size: 18px;
-}
-
-select {
-	background-color: #327BAB;
-	color: white;
-	font-size: 20px;
-	padding: 10px 0;
-	margin 20px 0 0;
-	border-radius: 2px;
-	width: 300px;
-	display: block;
-	border: none;
-	appearance: none;
-	-moz-appearance:none; 
-    	-webkit-appearance:none;
+	border-radius: 12px;
 }
 
 #formPosition {
