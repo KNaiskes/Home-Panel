@@ -10,20 +10,21 @@
 
 	<body>
 		<p>
-		<center> <h3><i> Bedroom led strip </i></h3></center>
+		<center> <h3><i> Led strips list </i></h3></center>
 		<div id="formPosition">
 			<center>
 			<br>
 		<form method="POST"> 
 			<ul>
 				{{range $n := .}}
-				<p><b> {{$n.DisplayName}} </b></p>
-			<input type="submit" id={{$n.Name}} name={{$n.Name}}
-				{{if (eq $n.State "true")}}style="background-color:red;" value="false"
-				{{else}} style="background-color:green;" value="true"
+				<p><b>Name: {{$n.DisplayName}} </b></p>
+				<b>State:</b> <input type="submit" id={{$n.Name}} name={{$n.Name}}
+				{{if (eq $n.State "true")}}style="color:green;background-color:green;" value="false"
+				{{else}} style="color:red; background-color:red;" value="true"
 				{{end}}>
 
-				<select name={{$n.Color}} onchange='this.form.submit()'>
+
+				<b>Color:</b> <select name={{$n.Color}} onchange='this.form.submit()'>
 				<option value="white"> White </option>
 				<option value="red"> Red </option>
 				<option value="blue"> Blue </option>

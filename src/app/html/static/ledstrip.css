@@ -11,12 +11,13 @@ input[type=submit]{
 	background-color: #51798F;
 	color: white;
 	padding: 10px 0;
-	margin: 20px 0 50px;
+	margin: 4px 2px;
 	border: none;
 	cursor: pointer;
-	display: block;
-	width: 300px;
+	display: inline-block;
+	width: 50px;
 	font-size: 18px;
+	border-radius: 12px;
 }
 
 select {
@@ -26,8 +27,8 @@ select {
 	padding: 10px 0;
 	margin 20px 0 0;
 	border-radius: 2px;
-	width: 300px;
-	display: block;
+	width: 150px;
+	display: inline-block;
 	border: none;
 	appearance: none;
 	-moz-appearance:none; 
@@ -35,7 +36,7 @@ select {
 }
 
 #formPosition {
-	background-color: #b3cde0;
+	background-color: #FEFEFE;
 	margin: 150px auto auto ;
 	width: auto;
 	border: 1px solid #F7F7F7;
