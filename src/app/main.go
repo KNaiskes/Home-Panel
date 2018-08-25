@@ -9,8 +9,6 @@ import (
 	"app/database"
 )
 
-
-
 func main() {
 	database.DBexists()
 	http.HandleFunc("/", indexHandler)
@@ -87,7 +85,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if ledstrip_color != "" {
 			database.UpdateLedstrip(ledstrip.Name, ledstrip_color, ledstrip_state)
-			//mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
+			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
 		}
 		fmt.Println("Color :", ledstrip_color)
 
