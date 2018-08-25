@@ -87,7 +87,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if ledstrip_color != "" {
 			database.UpdateLedstrip(ledstrip.Name, ledstrip_color, ledstrip_state)
-			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
+			//mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
 		}
 		fmt.Println("Color :", ledstrip_color)
 
@@ -112,10 +112,10 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 
 		if light_state == "true" {
 			database.UpdateLights(light.Name, light_state)
-			mqtt.ChangeState("on", light.Topic)
+			//mqtt.ChangeState("on", light.Topic)
 		} else if light_state == "false" {
 			database.UpdateLights(light.Name, light_state)
-			mqtt.ChangeState("off", light.Topic)
+			//mqtt.ChangeState("off", light.Topic)
 		}
 	}
 
