@@ -1,6 +1,5 @@
 body {
-	color: #000000;
-	background-color: #6B6B6B;
+	background-color: #F2F2F2;
 }
 
 .main-menu {
@@ -10,13 +9,14 @@ body {
 }
 
 .main-menu a {
-	background-color: #333333;
-	color: #00FF00;
+	background-color: #F9F9F9;
+	color: #002438;
+	font-weight: bold;
 	display: block;
 	padding: 12px;
 	text-decoration: none;
 }
 
 .main-menu a:hover {
-	background-color: #474747;
+	background-color: #42726F;
 }

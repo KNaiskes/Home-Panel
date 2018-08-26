@@ -1,4 +1,13 @@
 body {
 	color: #000000;
-	background-color: #6B6B6B;
+	background-color: #C7C7C7;
+}
+
+a {
+	color: #003D5E;
+	text-decoration: none;
+}	
+
+a:hover {
+	color: #007F00;
 }

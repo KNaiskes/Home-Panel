@@ -2,3 +2,4 @@ bin/app
 pkg/
 src/github.com
 src/app/db/
+src/golang.org/
