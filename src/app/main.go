@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"app/mqtt"
 	"app/database"
+	"github.com/gorilla/sessions"
 )
+
+var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 
 func main() {
 	database.DBexists()
@@ -37,6 +40,16 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	// just for testing
+	if database.CheckUser("kiriakos", "naiskes") == true {
+		session, err := store.Get(r, "cookie-name")
+		if err != nil {
+			log.Fatal(err)
+		}
+		session.Values["authenticated"] = true
+		session.Save(r, w)
+	}
+
 	fp := "src/app/html/templates/login.html"
 
 	tmpl, err := template.ParseFiles(fp)
@@ -50,6 +63,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "cookie-name")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
 	fp := "src/app/html/templates/dashboard.html"
 
 	tmpl, err := template.ParseFiles(fp)

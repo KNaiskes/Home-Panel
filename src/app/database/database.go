@@ -25,7 +25,52 @@ type Lights struct {
 
 const dbDir = "src/app/db/"
 const dbName = dbDir + "home.db"
+const dbUsers = dbDir + "users.db"
 
+func CreateUsersDB() {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	const userTable = `CREATE TABLE IF NOT EXISTS
+			   users(id INTEGER PRIMARY KEY, username TEXT,
+			   password TEXT)`
+	statement, err := db.Prepare(userTable)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+}
+
+func AddUser(username string, password string) {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
+	statement, err := db.Prepare(insertUser)
+	statement.Exec(username, password)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func CheckUser(username string, password string) bool {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement := `SELECT username, password  FROM users WHERE username=? AND password=?`
+	err = db.QueryRow(statement, username, password).Scan(&username, &password)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
+	return true
+}
 
 func InsertKnownLedstrips() []LedStrip {
 	//Already known led strips that will be added only when database is
@@ -56,6 +101,12 @@ func DBexists() {
 		CreateDB()
 		InsertAll()
 	}
+	if _, err := os.Stat(dbUsers); os.IsNotExist(err) {
+		os.MkdirAll(dbDir, 0700)
+		CreateUsersDB()
+		AddUser("kiriakos", "naiskes")
+	}
+
 }
 
 func CreateDB() {
@@ -87,8 +138,6 @@ func CreateDB() {
 }
 
 func InsertAll() {
-	//TODO check if database exists or not
-
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
