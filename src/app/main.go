@@ -40,8 +40,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	// just for testing
-	if database.CheckUser("kiriakos", "naiskes") == true {
+	usernameForm := r.FormValue("username")
+	passwordForm := r.FormValue("password")
+
+	if database.CheckUser(usernameForm, passwordForm) == true {
 		session, err := store.Get(r, "cookie-name")
 		if err != nil {
 			log.Fatal(err)
