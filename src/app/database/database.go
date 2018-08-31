@@ -104,7 +104,7 @@ func DBexists() {
 	if _, err := os.Stat(dbUsers); os.IsNotExist(err) {
 		os.MkdirAll(dbDir, 0700)
 		CreateUsersDB()
-		AddUser("kiriakos", "naiskes")
+		AddUser("admin", "admin")
 	}
 
 }

@@ -50,6 +50,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		session.Values["authenticated"] = true
 		session.Save(r, w)
+
+		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
 	fp := "src/app/html/templates/login.html"
@@ -71,7 +73,8 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
+		//http.Error(w, "Forbidden", http.StatusForbidden)
+		http.Redirect(w, r, "login", http.StatusSeeOther)
 		return
 	}
 
