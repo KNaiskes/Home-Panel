@@ -26,6 +26,22 @@ func main() {
 
 }
 
+func isLoggedIn(sessionName string) {
+	// if user is logged in - create their session
+	// else redirect them to log in page
+
+	session, err := store.Get(r, sessionName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+		//http.Error(w, "Forbidden", http.StatusForbidden)
+		http.Redirect(w, r, "login", http.StatusSeeOther)
+		return
+	}
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/index.html"
 	tmpl, err := template.ParseFiles(fp)
@@ -67,16 +83,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "cookie-name")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		//http.Error(w, "Forbidden", http.StatusForbidden)
-		http.Redirect(w, r, "login", http.StatusSeeOther)
-		return
-	}
+	isLoggedIn("cookie-name")
 
 	fp := "src/app/html/templates/dashboard.html"
 
@@ -92,6 +99,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name")
 
 	fp := "src/app/html/templates/ledstrip.html"
 
@@ -130,6 +138,8 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name")
+
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
 
