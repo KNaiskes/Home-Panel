@@ -26,7 +26,7 @@ func main() {
 
 }
 
-func isLoggedIn(sessionName string) {
+func isLoggedIn(sessionName string, w http.ResponseWriter, r *http.Request) {
 	// if user is logged in - create their session
 	// else redirect them to log in page
 
@@ -83,7 +83,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
-	isLoggedIn("cookie-name")
+	isLoggedIn("cookie-name", w, r)
 
 	fp := "src/app/html/templates/dashboard.html"
 
@@ -99,7 +99,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
-	isLoggedIn("cookie-name")
+	isLoggedIn("cookie-name", w, r)
 
 	fp := "src/app/html/templates/ledstrip.html"
 
@@ -138,7 +138,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func lightsHandler(w http.ResponseWriter, r *http.Request) {
-	isLoggedIn("cookie-name")
+	isLoggedIn("cookie-name", w, r)
 
 	fp := "src/app/html/templates/lights.html"
 	tmpl, err := template.ParseFiles(fp)
