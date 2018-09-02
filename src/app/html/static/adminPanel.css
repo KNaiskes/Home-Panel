@@ -1,0 +1,22 @@
+body {
+	background-color: #F2F2F2;
+}
+
+.main-menu {
+	width: auto;
+	margin: 150px auto auto;
+	font-size: 20px;
+}
+
+.main-menu a {
+	background-color: #F9F9F9;
+	color: #002438;
+	font-weight: bold;
+	display: block;
+	padding: 12px;
+	text-decoration: none;
+}
+
+.main-menu a:hover {
+	background-color: #42726F;
+}
