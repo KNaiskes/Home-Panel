@@ -19,6 +19,7 @@ func main() {
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/ledstrip", ledStripHandler)
 	http.HandleFunc("/lights", lightsHandler)
+	http.HandleFunc("/admin-panel", adminPanelHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -65,6 +66,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		session.Values["authenticated"] = true
+		session.Values["username"] = usernameForm
 		session.Save(r, w)
 
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
@@ -159,6 +161,29 @@ func lightsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	err = tmpl.Execute(w, database.DBlights())
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func adminPanelHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name", w, r)
+
+	session, err := store.Get(r, "cookie-name")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if session.Values["username"] != "admin" {
+		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
+	}
+
+	fp := "src/app/html/templates/adminPanel.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
