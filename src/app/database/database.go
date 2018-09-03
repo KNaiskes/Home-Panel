@@ -72,6 +72,22 @@ func CheckUser(username string, password string) bool {
 	return true
 }
 
+func UserExists(username string) bool {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement := `SELECT username FROM users WHERE username=?`
+	err = db.QueryRow(statement, username).Scan(&username)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
+	return true
+}
+
 func InsertKnownLedstrips() []LedStrip {
 	//Already known led strips that will be added only when database is
 	//lost or about to be created
