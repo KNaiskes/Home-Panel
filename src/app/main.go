@@ -206,14 +206,21 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 	isAdmin(w, r)
 
+	registerUsername := r.FormValue("username")
+	registerPassword := r.FormValue("password")
+
 	fp := "src/app/html/templates/addUser.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, database.UserExists(registerUsername))
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if !database.UserExists(registerUsername) {
+		database.AddUser(registerUsername, registerPassword)
 	}
 }
