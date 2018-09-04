@@ -48,11 +48,14 @@ func AddUser(username string, password string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
-	statement, err := db.Prepare(insertUser)
-	statement.Exec(username, password)
-	if err != nil {
-		log.Fatal(err)
+	//TODO: let users know why their username or password are not acceptable 
+	if len(username) >= 6 && len(password) >= 6 {
+		const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
+		statement, err := db.Prepare(insertUser)
+		statement.Exec(username, password)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
