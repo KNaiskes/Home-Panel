@@ -25,6 +25,10 @@
 				<p>
 				<input type="submit" value="Submit">
 				</p>
+				{{$valid := .}}
+				{{if $valid}}
+				<h4 style="color:red;">User already exists</h4>
+				{{end}}
 			</form>
 		</div>
 		</center>
