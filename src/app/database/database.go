@@ -91,6 +91,40 @@ func UserExists(username string) bool {
 	return true
 }
 
+func DelUser(username string) {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const delUser = `DELETE FROM users WHERE username=?`
+	statement, err := db.Prepare(delUser)
+	statement.Exec(&username)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func ShowUsers() []string {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var username string
+	usernames := []string{}
+
+	const showUsers = `SELECT username FROM users`
+
+	rows, err := db.Query(showUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		rows.Scan(&username)
+		usernames = append(usernames, username)
+	}
+	return usernames
+}
+
 func InsertKnownLedstrips() []LedStrip {
 	//Already known led strips that will be added only when database is
 	//lost or about to be created
