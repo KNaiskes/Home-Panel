@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/lights", lightsHandler)
 	http.HandleFunc("/admin-panel", adminPanelHandler)
 	http.HandleFunc("/addUser", addUserHander)
+	http.HandleFunc("/delUser", deleteUserHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -223,4 +224,26 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 	if !database.UserExists(registerUsername) {
 		database.AddUser(registerUsername, registerPassword)
 	}
+}
+
+func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name", w, r)
+	isAdmin(w, r)
+
+	delUsernameForm := r.FormValue("username")
+
+	fp := "src/app/html/templates/delUser.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//TODO: list all available users
+	database.DelUser(delUsernameForm)
+
 }
