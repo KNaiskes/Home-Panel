@@ -10,8 +10,12 @@
 		<p>
 		<center> <h2> Delete User </h2></center>
 		</p>
-
 		<center>
+			<p>
+			{{range $n := .}}
+			<h3> {{$n}} </h3>
+			{{end}}
+			</p>
 		<div class="main-menu">
 			<form action="" method="POST">
 				<p>

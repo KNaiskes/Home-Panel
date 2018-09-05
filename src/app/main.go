@@ -238,7 +238,8 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+
+	err = tmpl.Execute(w, database.ShowUsers())
 	if err != nil {
 		log.Fatal(err)
 	}
