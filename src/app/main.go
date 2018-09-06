@@ -244,7 +244,6 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	//TODO: list all available users
 	database.DelUser(delUsernameForm)
 
 }

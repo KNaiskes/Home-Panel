@@ -30,4 +30,15 @@ input[type=submit]{
 	font-size: 18px;
 }
 
+ul { list-style: none; }
 
+#usersList {
+	background-color: #F9F9F9;
+	float: bottom;
+	width: 500px;
+	overflow-y: auto;
+	height: 300px;
+	margin-top: 2em;
+	margin-bottom: 1em;
+	clear: both;
+}
