@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="src/app/html/static/updatePass.css">
+		<title> Update Password </title>
+	</head>
+
+	<body>
+		<p>
+		<center> <h2> Change a user's password </h2></center>
+		</p>
+		<center>
+			<p>
+			<div id="usersList">
+			<ul>
+			{{range $n := .}}
+			<li><h4>{{$n}}</h4></li>
+			{{end}}
+			</ul>
+			</div>
+			</p>
+		<div class="main-menu">
+			<form action="" method="POST">
+				<p>
+				<input type="text" placeholder="Username"
+				name="username" value="username" required>
+				</p>
+				<p>
+				<input type="text" placeholder="new password"
+				name="newPassword" value="password" required>
+				</p>
+				<p>
+				<input type="submit" value="Submit">
+				</p>
+			</form>
+		</div>
+		</center>
+
+	</body>
+</html>
