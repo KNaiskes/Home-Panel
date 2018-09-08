@@ -4,10 +4,13 @@ import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
+const myServer = "tcp://192.168.1.30:1883"
+const clientId = "mqttServer"
+
 func ChangeState(command string, topic string) {
 	opts := MQTT.NewClientOptions()
-	opts.AddBroker("tcp://192.168.1.30:1883")
-	opts.SetClientID("mqttServer")
+	opts.AddBroker(myServer)
+	opts.SetClientID(clientId)
 	opts.SetCleanSession(true)
 
 	c := MQTT.NewClient(opts)
@@ -30,8 +33,8 @@ func ChangeState(command string, topic string) {
 
 func ChangeColor(color string, topic string) {
 	opts := MQTT.NewClientOptions()
-	opts.AddBroker("tcp://192.168.1.30:1883")
-	opts.SetClientID("mqttServer")
+	opts.AddBroker(myServer)
+	opts.SetClientID(clientId)
 	opts.SetCleanSession(true)
 
 	c := MQTT.NewClient(opts)
