@@ -245,8 +245,9 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	database.DelUser(delUsernameForm)
-
+	if delUsernameForm != "admin" {
+		database.DelUser(delUsernameForm)
+	}
 }
 
 func updatePassHandler(w http.ResponseWriter, r *http.Request) {
