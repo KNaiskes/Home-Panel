@@ -83,6 +83,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		session.Values["username"] = usernameForm
 		session.Save(r, w)
 
+		if usernameForm == "admin" && passwordForm == "admin" {
+			http.Redirect(w, r, "updatePass", http.StatusSeeOther)
+		}
+
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
