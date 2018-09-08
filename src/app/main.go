@@ -83,6 +83,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		session.Values["username"] = usernameForm
 		session.Save(r, w)
 
+		if usernameForm == "admin" && passwordForm == "admin" {
+			http.Redirect(w, r, "updatePass", http.StatusSeeOther)
+		}
+
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
@@ -245,13 +249,17 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	database.DelUser(delUsernameForm)
-
+	if delUsernameForm != "admin" {
+		database.DelUser(delUsernameForm)
+	}
 }
 
 func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 	isAdmin(w, r)
+
+	usernameForm := r.FormValue("username")
+	passwordForm := r.FormValue("password")
 
 	fp := "src/app/html/templates/updatePass.html"
 	tmpl, err := template.ParseFiles(fp)
@@ -264,5 +272,5 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	database.UpdatePassword(usernameForm, passwordForm)
 }
