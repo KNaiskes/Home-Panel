@@ -125,6 +125,20 @@ func ShowUsers() []string {
 	return usernames
 }
 
+func UpdatePassword(username string, password string) {
+	db, err := sql.Open("sqlite3", dbUsers)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	const updatePass = `UPDATE users set password=? WHERE username=?`
+	statement, err := db.Prepare(updatePass)
+	statement.Exec(password, username)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func InsertKnownLedstrips() []LedStrip {
 	//Already known led strips that will be added only when database is
 	//lost or about to be created
