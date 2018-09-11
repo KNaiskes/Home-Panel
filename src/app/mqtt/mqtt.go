@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"strconv"
+	"strings"
 )
 
 const myServer = "tcp://192.168.1.30:1883"
@@ -53,8 +55,15 @@ func ChangeColor(color string, topic string) {
 }
 
 func onMessageReceived(client MQTT.Client, message MQTT.Message) {
-	if string(message.Payload()) == "temperature" {
-		fmt.Println("Got temperature")
+	var temporary  = message.Payload()
+
+	var metrics string = string(temporary)
+
+	metric, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
+
+	if metric > 0 {
+
+		fmt.Println("Metric: ", metric)
 	}
 }
 
@@ -81,4 +90,22 @@ func Dht22Mqtt() {
 	}
 
 	<-c
+}
+
+func SendMsg(topic string, command string) {
+	opts := MQTT.NewClientOptions()
+	opts.AddBroker(myServer)
+	opts.SetClientID(clientId)
+	opts.SetCleanSession(true)
+
+	c := MQTT.NewClient(opts)
+
+	if token := c.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
+	}
+
+	token := c.Publish(topic, 0, false, command)
+	token.Wait()
+	c.Disconnect(250)
+
 }
