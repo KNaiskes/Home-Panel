@@ -51,13 +51,26 @@ func CreateMeasurementsDB() {
 	}
 	const measurementsTable = `CREATE TABLE IF NOT EXISTS
 				   measurements(id INTEGER PRIMARY KEY,
-				   temperatrure TEXT, humidity TEXT)`
+				   temperatrure REAL, humidity REAL)`
 
         statement, err := db.Prepare(measurementsTable)
 	if err != nil {
 		log.Fatal(err)
 	}
 	statement.Exec()
+}
+
+func AddTemperature(temperature float64) {
+	db, err := sql.Open("sqlite3", dbMeasurements)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const addTemperatureTable = `INSERT INTO measurements(temperatrure) VALUES(?)`
+	statement, err := db.Prepare(addTemperatureTable)
+	statement.Exec(temperature)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func AddUser(username string, password string) {

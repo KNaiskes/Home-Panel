@@ -3,6 +3,7 @@ package mqtt
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"fmt"
+	"app/database"
 	"os"
 	"os/signal"
 	"syscall"
@@ -62,6 +63,7 @@ func onMessageReceived(client MQTT.Client, message MQTT.Message) {
 	metric, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
 
 	if metric > 0 {
+		database.AddTemperature(metric)
 
 		fmt.Println("Metric: ", metric)
 	}
