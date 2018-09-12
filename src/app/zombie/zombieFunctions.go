@@ -11,6 +11,6 @@ func GetDht22(minutes time.Duration) {
 
 	for {
 		<-time.After(minutes * time.Second) //seconds instead of minutes just for testing
-		go mqtt.SendMsg(topic, getTemperature)
+		go mqtt.SendMsg(topic, command)
 	}
 }

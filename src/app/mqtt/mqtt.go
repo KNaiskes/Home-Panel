@@ -62,11 +62,13 @@ func onMessageReceived(client MQTT.Client, message MQTT.Message) {
 	split := strings.Split(metrics, ",")
 	//temperature, humidity := split[0], split[1]
 
-	temperature, _ := strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
-	humidity, _ := strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
+	if metrics != "getTempHum" {
+		temperature, _ := strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
+		humidity, _ := strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
 
-	if temperature > 0  && humidity > 0 {
-		database.AddTempHum(temperature, humidity)
+		if temperature > 0  && humidity > 0 {
+			database.AddTempHum(temperature, humidity)
+		}
 	}
 }
 
