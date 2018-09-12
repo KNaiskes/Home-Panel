@@ -49,7 +49,7 @@ func AddUser(username string, password string) {
 		log.Fatal(err)
 	}
 	//TODO: let users know why their username or password are not acceptable 
-	if len(username) >= 6 && len(password) >= 6 {
+	if len(username) >= 5 && len(password) >= 5 {
 		const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
 		statement, err := db.Prepare(insertUser)
 		statement.Exec(username, password)
