@@ -2,7 +2,6 @@ package mqtt
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"fmt"
 	"app/database"
 	"os"
 	"os/signal"
@@ -61,15 +60,13 @@ func onMessageReceived(client MQTT.Client, message MQTT.Message) {
 	var metrics string = string(temporary)
 
 	split := strings.Split(metrics, ",")
-	temperature, humidity := split[0], split[1]
+	//temperature, humidity := split[0], split[1]
 
-	temperature, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
-	humidity, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
+	temperature, _ := strconv.ParseFloat(strings.TrimSpace(split[0]), 64)
+	humidity, _ := strconv.ParseFloat(strings.TrimSpace(split[1]), 64)
 
-	if metric > 0 {
+	if temperature > 0  && humidity > 0 {
 		database.AddTempHum(temperature, humidity)
-
-		fmt.Println("Metric: ", metric)
 	}
 }
 
