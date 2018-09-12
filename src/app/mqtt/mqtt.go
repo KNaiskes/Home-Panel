@@ -60,10 +60,14 @@ func onMessageReceived(client MQTT.Client, message MQTT.Message) {
 
 	var metrics string = string(temporary)
 
-	metric, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
+	split := strings.Split(metrics, ",")
+	temperature, humidity := split[0], split[1]
+
+	temperature, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
+	humidity, _ := strconv.ParseFloat(strings.TrimSpace(metrics), 64)
 
 	if metric > 0 {
-		database.AddTemperature(metric)
+		database.AddTempHum(temperature, humidity)
 
 		fmt.Println("Metric: ", metric)
 	}

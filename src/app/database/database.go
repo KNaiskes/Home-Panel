@@ -60,14 +60,14 @@ func CreateMeasurementsDB() {
 	statement.Exec()
 }
 
-func AddTemperature(temperature float64) {
+func AddTempHum(temperature float64, humidity float64) {
 	db, err := sql.Open("sqlite3", dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
-	const addTemperatureTable = `INSERT INTO measurements(temperatrure) VALUES(?)`
+	const addTemperatureTable = `INSERT INTO measurements(temperatrure, humidity) VALUES(?, ?)`
 	statement, err := db.Prepare(addTemperatureTable)
-	statement.Exec(temperature)
+	statement.Exec(temperature, humidity)
 	if err != nil {
 		log.Fatal(err)
 	}
