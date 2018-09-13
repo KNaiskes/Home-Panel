@@ -10,6 +10,12 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+type AddUserMessages struct {
+	UsernameLength int
+	PasswordLength int
+	UsernameExists bool
+}
+
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 
 func main() {
@@ -215,16 +221,24 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 	registerUsername := r.FormValue("username")
 	registerPassword := r.FormValue("password")
 
+	lenUsername := len(registerUsername)
+	lenPassword := len(registerPassword)
+	userExists  := database.UserExists(registerUsername)
+
+	Messages := AddUserMessages{lenUsername, lenPassword, userExists}
+
 	fp := "src/app/html/templates/addUser.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, database.UserExists(registerUsername))
+
+	err = tmpl.Execute(w, Messages)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 
 	if !database.UserExists(registerUsername) {
 		database.AddUser(registerUsername, registerPassword)

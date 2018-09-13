@@ -16,20 +16,33 @@
 			<form action="" method="POST">
 				<p>
 				<input type="text" placeholder="Username"
-				name="username" value="username" required>
+				name="username" value="" required>
 				</p>
 				<p>
 				<input type="password" placeholder="Password" 
-			       	name="password" value="password" required>
+			       	name="password" value="" required>
 				</p>
 				<p>
 				<input type="submit" value="Submit">
 				</p>
-				{{$valid := .}}
-				{{if $valid}}
+				{{if (gt .UsernameLength 0)}}
+				{{if (lt .UsernameLength 5)}}
+				<h4 style="color:red;"> Username has to be at 
+					least 5 characters long</h4>
+				{{end}}
+
+				{{if (lt .PasswordLength 5)}}
+				<h4 style="color:red;"> Password has to be at
+					least 5 characters long </h4>
+				{{end}}
+
+				{{if .UsernameExists}}
 				<h4 style="color:red;">User already exists</h4>
 				{{else}}
+				{{if and (ge .UsernameLength 5) (ge .PasswordLength 5)}}
 				<h4 style="color:green;">User has been registered</h4>
+				{{end}}
+				{{end}}
 				{{end}}
 			</form>
 		</div>
