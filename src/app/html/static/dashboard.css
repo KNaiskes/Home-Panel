@@ -1,5 +1,5 @@
 body {
-	background-color: #F2F2F2;
+	background-color: #ede3de;
 }
 
 .main-menu {
@@ -9,8 +9,8 @@ body {
 }
 
 .main-menu a {
-	background-color: #F9F9F9;
-	color: #002438;
+	background-color: #707075;
+	color: #000000;
 	font-weight: bold;
 	display: block;
 	padding: 12px;
