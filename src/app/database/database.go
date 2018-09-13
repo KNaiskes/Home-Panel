@@ -26,6 +26,7 @@ type Lights struct {
 const dbDir = "src/app/db/"
 const dbName = dbDir + "home.db"
 const dbUsers = dbDir + "users.db"
+const dbMeasurements = dbDir + "measurements.db"
 
 func CreateUsersDB() {
 	db, err := sql.Open("sqlite3", dbUsers)
@@ -41,6 +42,35 @@ func CreateUsersDB() {
 		log.Fatal(err)
 	}
 	statement.Exec()
+}
+
+func CreateMeasurementsDB() {
+	db, err := sql.Open("sqlite3", dbMeasurements)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const measurementsTable = `CREATE TABLE IF NOT EXISTS
+				   measurements(id INTEGER PRIMARY KEY,
+				   temperatrure REAL, humidity REAL)`
+
+        statement, err := db.Prepare(measurementsTable)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement.Exec()
+}
+
+func AddTempHum(temperature float64, humidity float64) {
+	db, err := sql.Open("sqlite3", dbMeasurements)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const addTemperatureTable = `INSERT INTO measurements(temperatrure, humidity) VALUES(?, ?)`
+	statement, err := db.Prepare(addTemperatureTable)
+	statement.Exec(temperature, humidity)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func AddUser(username string, password string) {
@@ -172,6 +202,10 @@ func DBexists() {
 		os.MkdirAll(dbDir, 0700)
 		CreateUsersDB()
 		AddUser("admin", "admin")
+	}
+	if _, err := os.Stat(dbMeasurements); os.IsNotExist(err) {
+		os.MkdirAll(dbDir, 0700)
+		CreateMeasurementsDB()
 	}
 
 }
