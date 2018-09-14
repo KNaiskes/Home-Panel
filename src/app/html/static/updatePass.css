@@ -1,5 +1,5 @@
 body { 
-	background: #F7F7F7;
+	background: #E5E5E5;
 }
 
 #formPosition {
@@ -19,8 +19,8 @@ input[type=text], input[type=password] {
 }
 
 input[type=submit]{
-	background-color: #FFB72F;
-	color: white;
+	background-color: #E5A42A;
+	color: #000000;
 	padding: 14px 20px;
 	margin: 20px 0 0;
 	border: none;
@@ -33,12 +33,12 @@ input[type=submit]{
 ul { list-style: none; }
 
 #usersList {
-	background-color: #F9F9F9;
+	background-color: #EFEFEF;
 	float: bottom;
-	width: 500px;
+	width: 300px;
 	overflow-y: auto;
-	height: 300px;
-	margin-top: 2em;
+	height: 250px;
+	margin-top: 1em;
 	margin-bottom: 1em;
 	clear: both;
 }
