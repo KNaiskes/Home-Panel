@@ -23,6 +23,12 @@ type UpdatePasswordMessages struct {
 	UsernamesList []string
 }
 
+type LoginMessages struct {
+	CredentialsMatch bool
+	UsernameLength int
+	PasswordLength int
+}
+
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 
 func main() {
@@ -87,6 +93,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	usernameForm := r.FormValue("username")
 	passwordForm := r.FormValue("password")
 
+	lenUsername := len(usernameForm)
+	lenPassword := len(passwordForm)
+	match := database.CheckUser(usernameForm, passwordForm)
+
+	Messages := LoginMessages{match, lenUsername, lenPassword}
+
 	if database.CheckUser(usernameForm, passwordForm) == true {
 		session, err := store.Get(r, "cookie-name")
 		if err != nil {
@@ -109,7 +121,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, Messages)
 	if err != nil {
 		log.Fatal(err)
 	}
