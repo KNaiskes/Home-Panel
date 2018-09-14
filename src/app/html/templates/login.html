@@ -21,6 +21,9 @@
 			       	name="password" value="">
 				<input type="submit" value="Submit">
 				</p>
+				{{if and (not .CredentialsMatch) (gt .UsernameLength 0)	(gt .PasswordLength 0)}}
+				<h4 style="color:red;"> Credentials do not match </h4>
+				{{end}}
 			</form>
 		</div>
 	</body>
