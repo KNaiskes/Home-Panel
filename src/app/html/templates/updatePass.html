@@ -14,7 +14,7 @@
 			<p>
 			<div id="usersList">
 			<ul>
-			{{range $n := .}}
+			{{range $n := $.UsernamesList}}
 			<li><h4>{{$n}}</h4></li>
 			{{end}}
 			</ul>
@@ -27,12 +27,28 @@
 				name="username" value="" required>
 				</p>
 				<p>
-				<input type="password" placeholder="new password"
+				<input type="password" placeholder="New Password"
 				name="password" value="" required>
 				</p>
 				<p>
 				<input type="submit" value="Submit">
 				</p>
+				{{if (gt .NewPasswordLength 0)}}
+				{{if not (ge .NewPasswordLength 5)}}
+				<h4 style="color:red;"> New password has to
+					be at least 5 characters long </h1>
+				{{end}}
+				{{end}}
+	
+				{{if and (not .UsernameExists) (gt .UserNameLength 0)}}
+				<h4 style="color:red;"> User does not exist </h4>
+				{{end}}
+
+				{{if and (ge .UserNameLength 5) (ge .NewPasswordLength 5)}}
+				<h4 style="color:green;"> Password has 
+				successfully changed </h4>
+				{{end}}
+
 			</form>
 		</div>
 		</center>

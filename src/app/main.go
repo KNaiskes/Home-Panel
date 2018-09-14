@@ -16,6 +16,13 @@ type AddUserMessages struct {
 	UsernameExists bool
 }
 
+type UpdatePasswordMessages struct {
+	UsernameExists bool
+	UserNameLength int
+	NewPasswordLength int
+	UsernamesList []string
+}
+
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 
 func main() {
@@ -274,6 +281,12 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 
 	usernameForm := r.FormValue("username")
 	passwordForm := r.FormValue("password")
+	userExists := database.UserExists(usernameForm)
+	lenUsername := len(usernameForm)
+	lenPassword := len(passwordForm)
+	usersList := database.ShowUsers()
+
+	Messages := UpdatePasswordMessages{userExists, lenUsername, lenPassword, usersList}
 
 	fp := "src/app/html/templates/updatePass.html"
 	tmpl, err := template.ParseFiles(fp)
@@ -282,9 +295,11 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	err = tmpl.Execute(w, database.ShowUsers())
+	err = tmpl.Execute(w, Messages)
 	if err != nil {
 		log.Fatal(err)
 	}
-	database.UpdatePassword(usernameForm, passwordForm)
+	if userExists == true && lenUsername >= 5 && lenPassword >= 5 {
+		database.UpdatePassword(usernameForm, passwordForm)
+	}
 }
