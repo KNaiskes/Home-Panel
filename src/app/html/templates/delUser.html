@@ -14,7 +14,7 @@
 			<p>
 			<div id="usersList">
 			<ul>
-			{{range $n := .}}
+			{{range $n := $.UsernamesList}}
 			<li><h4>{{$n}}</h4></li>
 			{{end}}
 			</ul>
@@ -29,6 +29,14 @@
 				<p>
 				<input type="submit" value="Submit">
 				</p>
+				{{if and (gt .UsernameLength 0) (not .UsernameExists)}}
+				<h4 style="color:red;"> User does not exist </h4>
+				{{else}}
+				{{if and (ge .UsernameLength 5) (.UsernameExists)}}
+				<h4 style="color:green;"> User has successfully
+					deleted </h4>
+				{{end}}
+				{{end}}
 			</form>
 		</div>
 		</center>
