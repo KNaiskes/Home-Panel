@@ -36,6 +36,7 @@ type DelUserMessages struct {
 }
 
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
+var userIsAdmin bool
 
 func main() {
 	database.DBexists()
@@ -118,6 +119,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "updatePass", http.StatusSeeOther)
 		}
 
+		if usernameForm == "admin" {
+			userIsAdmin = true
+		} else {
+			userIsAdmin = false
+		}
+
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
@@ -142,7 +149,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, userIsAdmin)
 	if err != nil {
 		log.Fatal(err)
 	}
