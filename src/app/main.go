@@ -29,7 +29,14 @@ type LoginMessages struct {
 	PasswordLength int
 }
 
+type DelUserMessages struct {
+	UsernameLength int
+	UsernameExists bool
+	UsernamesList []string
+}
+
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
+var userIsAdmin bool
 
 func main() {
 	database.DBexists()
@@ -112,6 +119,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "updatePass", http.StatusSeeOther)
 		}
 
+		if usernameForm == "admin" {
+			userIsAdmin = true
+		} else {
+			userIsAdmin = false
+		}
+
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
@@ -136,7 +149,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, nil)
+	err = tmpl.Execute(w, userIsAdmin)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -270,6 +283,12 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	delUsernameForm := r.FormValue("username")
 
+	lenUsername := len(delUsernameForm)
+	UserExists := database.UserExists(delUsernameForm)
+	usersList := database.ShowUsers()
+
+	Messages := DelUserMessages{lenUsername, UserExists, usersList}
+
 	fp := "src/app/html/templates/delUser.html"
 	tmpl, err := template.ParseFiles(fp)
 
@@ -277,12 +296,12 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	err = tmpl.Execute(w, database.ShowUsers())
+	err = tmpl.Execute(w, Messages)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if delUsernameForm != "admin" {
+	if delUsernameForm != "admin" && UserExists {
 		database.DelUser(delUsernameForm)
 	}
 }
