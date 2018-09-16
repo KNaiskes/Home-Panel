@@ -44,7 +44,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
 	http.HandleFunc("/ledstrip", ledStripHandler)
-	http.HandleFunc("/lights", lightsHandler)
+	http.HandleFunc("/twoState", twoStateDevicesHandler)
 	http.HandleFunc("/admin-panel", adminPanelHandler)
 	http.HandleFunc("/addUser", addUserHander)
 	http.HandleFunc("/delUser", deleteUserHandler)
@@ -195,28 +195,26 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func lightsHandler(w http.ResponseWriter, r *http.Request) {
+func twoStateDevicesHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 
-	fp := "src/app/html/templates/lights.html"
+	fp := "src/app/html/templates/twoState.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	for _, light := range database.DBlights() {
-		light_state := r.FormValue(light.Name)
+	for _, device := range database.DBtwoStateDevices() {
+		device_state := r.FormValue(device.Name)
 
-		if light_state == "true" {
-			database.UpdateLights(light.Name, light_state)
-			//mqtt.ChangeState("on", light.Topic)
-		} else if light_state == "false" {
-			database.UpdateLights(light.Name, light_state)
-			//mqtt.ChangeState("off", light.Topic)
+		if device_state == "true" {
+			database.UpdateTwoState(device.Name, device_state)
+		} else if device_state == "false" {
+			database.UpdateTwoState(device.Name, device_state)
 		}
 	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = tmpl.Execute(w, database.DBlights())
+	err = tmpl.Execute(w, database.DBtwoStateDevices())
 	if err != nil {
 		log.Fatal(err)
 	}
