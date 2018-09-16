@@ -16,7 +16,7 @@ type LedStrip struct {
 	Topic	    string
 }
 
-type Lights struct {
+type TwoState struct {
 	DisplayName string
 	Name	    string
 	State       string
@@ -170,9 +170,6 @@ func UpdatePassword(username string, password string) {
 }
 
 func InsertKnownLedstrips() []LedStrip {
-	//Already known led strips that will be added only when database is
-	//lost or about to be created
-	//Add any new led strips below
 	bedroomLedstrip := LedStrip{"Bedroom", "bedroom_ledstrip", "false",
 				   "white", "ledStrip"}
 
@@ -181,15 +178,12 @@ func InsertKnownLedstrips() []LedStrip {
 	return MyledStrips
 }
 
-func InsertKnownLights() []Lights {
-	//Already known lights that will be added only when database is lost
-	//or about to be created
-	//Add any new light below
-	officeLamp := Lights{"Office Lamp", "office_lamp", "false", "officeLamp"}
-	DeskLamp := Lights{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
-	MyLights := []Lights{officeLamp, DeskLamp}
+func InsertKnownDevices() []TwoState {
+	officeLamp := TwoState{"Office Lamp", "office_lamp", "false", "officeLamp"}
+	DeskLamp := TwoState{"Desk Lamp", "desk_lamp", "false", "deskLamp"}
+	MyDevices := []TwoState{officeLamp, DeskLamp}
 
-	return MyLights
+	return MyDevices
 }
 
 func DBexists() {
@@ -216,7 +210,7 @@ func CreateDB() {
 		log.Fatal(err)
 	}
 
-	const lightsTable = `CREATE TABLE IF NOT EXISTS 
+	const twoStateTable = `CREATE TABLE IF NOT EXISTS 
 			     lights(id INTEGER PRIMARY KEY, displayname TEXT,
 			     name TEXT, state TEXT, topic TEXT)`
 
@@ -225,7 +219,7 @@ func CreateDB() {
 			       displayname TEXT, name TEXT, state TEXT,
 			       color TEXT, topic TEXT)`
 
-	statement, err := db.Prepare(lightsTable)
+	statement, err := db.Prepare(twoStateTable)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -244,14 +238,14 @@ func InsertAll() {
 		log.Fatal(err)
 	}
 
-	const insertLight = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
+	const insertDevice = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
 	const insertLedstrip = `INSERT INTO ledstrips (displayname, name,
 				state, color, topic) VALUES (?, ?, ?, ?, ?)`
 
-	for _, light := range InsertKnownLights() {
-		lightStatement, _ := db.Prepare(insertLight)
-		lightStatement.Exec(light.DisplayName, light.Name,
-				    light.State, light.Topic)
+	for _, device := range InsertKnownDevices() {
+		deviceStatement, _ := db.Prepare(insertDevice)
+		deviceStatement.Exec(device.DisplayName, device.Name,
+				    device.State, device.Topic)
 	}
 
 	for _, ledstrip := range InsertKnownLedstrips() {
@@ -262,7 +256,7 @@ func InsertAll() {
 	}
 }
 
-func DBlights() []Lights {
+func DBtwoStateDevices() []TwoState{
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
@@ -273,37 +267,36 @@ func DBlights() []Lights {
 	var state string
 	var topic string
 
-	Mylights := []Lights{}
-	const getLightState = `SELECT displayname, name, state, 
+	TwoStateDevices := []TwoState{}
+	const getDeviceState = `SELECT displayname, name, state, 
 			       topic FROM lights`
 
-	//getLighStateStatement, err := db.Prepare(getLightState)
-	rows, err := db.Query(getLightState)
+	rows, err := db.Query(getDeviceState)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for rows.Next() {
 		rows.Scan(&displayname, &name, &state, &topic)
-		temp := Lights{displayname, name, state, topic}
-		Mylights = append(Mylights, temp)
+		temp := TwoState{displayname, name, state, topic}
+		TwoStateDevices = append(TwoStateDevices, temp)
 	}
-	return Mylights
+	return TwoStateDevices
 }
 
-func UpdateLights(name string, state string) {
+func UpdateTwoState(name string, state string) {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	const updateLight = "UPDATE lights SET state = ? WHERE name = ?"
+	const updateState = "UPDATE lights SET state = ? WHERE name = ?"
 
-	updateLightStatement, err := db.Prepare(updateLight)
+	updateStateStatement, err := db.Prepare(updateState)
 	if err != nil {
 		log.Fatal(err)
 	}
-	updateLightStatement.Exec(state, name)
+	updateStateStatement.Exec(state, name)
 }
 
 func UpdateLedstrip(name string, color string, state string) {
