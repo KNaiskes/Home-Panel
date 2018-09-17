@@ -87,6 +87,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/index.html"
 	tmpl, err := template.ParseFiles(fp)
 
+
 	if err != nil {
 		log.Fatal(err)
 	}
