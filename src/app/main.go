@@ -39,7 +39,6 @@ var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 var userIsAdmin bool
 
 func main() {
-	database.DBexists()
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/dashboard", dashboardHandler)
