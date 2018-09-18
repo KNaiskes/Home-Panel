@@ -14,3 +14,10 @@ func GetDht22(minutes time.Duration) {
 		go mqtt.SendMsg(topic, command)
 	}
 }
+
+func RunEvery(f func(), minutes time.Duration) {
+	for {
+		<-time.After(minutes * time.Second)
+		go f()
+	}
+}
