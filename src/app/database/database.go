@@ -224,6 +224,39 @@ func InsertKnownDevices() []TwoState {
 	return MyDevices
 }
 
+func DeviceExists(name string) bool {
+	//TODO: check if mqtt topic exists too
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement := `SELECT name FROM lights WHERE name=?`
+	err = db.QueryRow(statement, name).Scan(&name)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
+	return true
+}
+
+func AddTwoStateDevice(name string, displayname string,  topic string) {
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !DeviceExists(name) {
+		state := "false"
+		const checkDevice = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
+		statement, err := db.Prepare(checkDevice)
+		statement.Exec(displayname, name, state, topic)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
 func DBexists() {
 	if _, err := os.Stat(dbName); os.IsNotExist(err) {
 		os.MkdirAll(dbDir, 0700)
