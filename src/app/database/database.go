@@ -92,6 +92,25 @@ func GetTemperature() []float64 {
 	return metrics
 }
 
+func GetHumidity() []float64 {
+	db, err := sql.Open("sqlite3", dbMeasurements)
+	if err != nil {
+		log.Fatal(err)
+	}
+	metrics := []float64{}
+	var Humidity float64
+	const getHumTable = `SELECT temperature FROM measurements`
+	rows, err := db.Query(getHumTable)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		rows.Scan(&Humidity)
+		metrics = append(metrics, Humidity )
+	}
+	return metrics
+}
+
 func AddUser(username string, password string) {
 	db, err := sql.Open("sqlite3", dbUsers)
 	if err != nil {
@@ -203,6 +222,39 @@ func InsertKnownDevices() []TwoState {
 	MyDevices := []TwoState{officeLamp, DeskLamp}
 
 	return MyDevices
+}
+
+func DeviceExists(name string) bool {
+	//TODO: check if mqtt topic exists too
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	statement := `SELECT name FROM lights WHERE name=?`
+	err = db.QueryRow(statement, name).Scan(&name)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
+	return true
+}
+
+func AddTwoStateDevice(name string, displayname string,  topic string) {
+	db, err := sql.Open("sqlite3", dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !DeviceExists(name) {
+		state := "false"
+		const checkDevice = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
+		statement, err := db.Prepare(checkDevice)
+		statement.Exec(displayname, name, state, topic)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func DBexists() {

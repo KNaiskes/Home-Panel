@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="src/app/html/static/addNewDevice.css">
+		<title> Add New Device </title>
+
+		<div id="switchLink">
+		<a href="/admin-panel"> &#9935; Switch to Admin Panel </a>
+		</div>
+	</head>
+
+	<body>
+		<p>
+		<center> <h2> Add New Device </h2></center>
+		</p>
+
+		<center>
+			<form action="" method="POST">
+				<p>
+				<input type="text" placeholder="Device Name"
+				name="deviceName" value="" required>
+				</p>
+				<p>
+				<input type="text" placeholder="Display Name"
+				name="displayName" value="" required>
+				</p>
+				<p>
+				<input type="text" placeholder="MQTT topic"
+				name="deviceMqtt" value="" required>
+				</p>
+				<input type="submit" value="Submit">
+			</form>
+		</center>
+
+	</body>
+
+</html>

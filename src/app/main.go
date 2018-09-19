@@ -48,6 +48,7 @@ func main() {
 	http.HandleFunc("/addUser", addUserHander)
 	http.HandleFunc("/delUser", deleteUserHandler)
 	http.HandleFunc("/updatePass", updatePassHandler)
+	http.HandleFunc("/addNewDevice", addNewDeviceHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -330,5 +331,30 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if userExists == true && lenUsername >= 5 && lenPassword >= 5 {
 		database.UpdatePassword(usernameForm, passwordForm)
+	}
+}
+
+func addNewDeviceHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name", w, r)
+	isAdmin(w, r)
+
+	name := r.FormValue("deviceName")
+	dispayName := r.FormValue("displayName")
+	mqttTopic := r.FormValue("deviceMqtt")
+
+	fp := "src/app/html/templates/addNewDevice.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	fmt.Println("Name: ", name)
+	fmt.Println("Mqtt: ", mqttTopic)
+	fmt.Println("DisplayName: ", dispayName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
