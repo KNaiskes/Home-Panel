@@ -92,6 +92,25 @@ func GetTemperature() []float64 {
 	return metrics
 }
 
+func GetHumidity() []float64 {
+	db, err := sql.Open("sqlite3", dbMeasurements)
+	if err != nil {
+		log.Fatal(err)
+	}
+	metrics := []float64{}
+	var Humidity float64
+	const getHumTable = `SELECT temperature FROM measurements`
+	rows, err := db.Query(getHumTable)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		rows.Scan(&Humidity)
+		metrics = append(metrics, Humidity )
+	}
+	return metrics
+}
+
 func AddUser(username string, password string) {
 	db, err := sql.Open("sqlite3", dbUsers)
 	if err != nil {
