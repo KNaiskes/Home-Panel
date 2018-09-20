@@ -345,9 +345,7 @@ func addNewDeviceHandler(w http.ResponseWriter, r *http.Request) {
 	fp := "src/app/html/templates/addNewDevice.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	fmt.Println("Name: ", name)
-	fmt.Println("Mqtt: ", mqttTopic)
-	fmt.Println("DisplayName: ", dispayName)
+	database.AddTwoStateDevice(name, dispayName, mqttTopic)
 
 	if err != nil {
 		log.Fatal(err)

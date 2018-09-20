@@ -241,20 +241,23 @@ func DeviceExists(name string) bool {
 	return true
 }
 
-func AddTwoStateDevice(name string, displayname string,  topic string) {
+func AddTwoStateDevice(name string, displayname string,  topic string) bool {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if !DeviceExists(name) {
+	if !DeviceExists(name) && len(name) >= 3 && len(displayname) >= 3 && len(topic) >= 3 {
 		state := "false"
 		const checkDevice = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
 		statement, err := db.Prepare(checkDevice)
 		statement.Exec(displayname, name, state, topic)
+
 		if err != nil {
 			log.Fatal(err)
 		}
+		return true
 	}
+	return false
 }
 
 func DBexists() {
