@@ -342,6 +342,7 @@ func addNewDeviceHandler(w http.ResponseWriter, r *http.Request) {
 	dispayName := r.FormValue("displayName")
 	mqttTopic := r.FormValue("deviceMqtt")
 
+	exists := database.DeviceExists(name, dispayName, mqttTopic)
 	fp := "src/app/html/templates/addNewDevice.html"
 	tmpl, err := template.ParseFiles(fp)
 

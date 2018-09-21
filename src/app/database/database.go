@@ -224,14 +224,14 @@ func InsertKnownDevices() []TwoState {
 	return MyDevices
 }
 
-func DeviceExists(name string) bool {
-	//TODO: check if mqtt topic exists too
+func DeviceExists(displayname string, name string, topic string) bool {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	statement := `SELECT name FROM lights WHERE name=?`
-	err = db.QueryRow(statement, name).Scan(&name)
+	statement := `SELECT displayname, name, topic FROM lights 
+			WHERE displayname=? OR name=? OR topic=?`
+	err = db.QueryRow(statement, displayname, name, topic).Scan(&displayname, &name, &topic)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Fatal(err)
@@ -241,12 +241,12 @@ func DeviceExists(name string) bool {
 	return true
 }
 
-func AddTwoStateDevice(name string, displayname string,  topic string) bool {
+func AddTwoStateDevice(displayname string, name string, topic string) bool {
 	db, err := sql.Open("sqlite3", dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if !DeviceExists(name) && len(name) >= 3 && len(displayname) >= 3 && len(topic) >= 3 {
+	if !DeviceExists(displayname, name, topic) && len(name) >= 3 && len(displayname) >= 3 && len(topic) >= 3 {
 		state := "false"
 		const checkDevice = `INSERT INTO lights (displayname, name, state, topic) VALUES (?, ?, ?, ?)`
 		statement, err := db.Prepare(checkDevice)
