@@ -28,21 +28,39 @@ const dbName = dbDir + "home.db"
 const dbUsers = dbDir + "users.db"
 const dbMeasurements = dbDir + "measurements.db"
 
-func CreateUsersDB() {
-	db, err := sql.Open("sqlite3", dbUsers)
+func SimpleQuery(driver string, dbName string, query string) {
+	db, err := sql.Open(driver, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	const userTable = `CREATE TABLE IF NOT EXISTS
-			   users(id INTEGER PRIMARY KEY, username TEXT,
-			   password TEXT)`
-	statement, err := db.Prepare(userTable)
+	statement, err := db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	statement.Exec()
 }
+
+func CreateUsersDB() {
+	SimpleQuery("sqlite3", dbUsers,
+	`CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, 
+		username TEXT, password TEXT)`)
+}
+
+//func CreateUsersDB() {
+//	db, err := sql.Open("sqlite3", dbUsers)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//
+//	const userTable = `CREATE TABLE IF NOT EXISTS
+//			   users(id INTEGER PRIMARY KEY, username TEXT,
+//			   password TEXT)`
+//	statement, err := db.Prepare(userTable)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	statement.Exec()
+//}
 
 func CreateMeasurementsDB() {
 	db, err := sql.Open("sqlite3", dbMeasurements)
