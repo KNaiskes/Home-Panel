@@ -28,6 +28,8 @@ const dbName = dbDir + "home.db"
 const dbUsers = dbDir + "users.db"
 const dbMeasurements = dbDir + "measurements.db"
 
+const DriverDB = "sqlite3"
+
 func SimpleQuery(driver string, dbName string, query string) {
 	db, err := sql.Open(driver, dbName)
 	if err != nil {
@@ -41,41 +43,35 @@ func SimpleQuery(driver string, dbName string, query string) {
 }
 
 func CreateUsersDB() {
-	SimpleQuery("sqlite3", dbUsers,
-	`CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, 
-		username TEXT, password TEXT)`)
+	query := `CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,
+			username TEXT, password TEXT)`
+	SimpleQuery(DriverDB, dbUsers, query)
+
+
 }
 
-//func CreateUsersDB() {
-//	db, err := sql.Open("sqlite3", dbUsers)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	const userTable = `CREATE TABLE IF NOT EXISTS
-//			   users(id INTEGER PRIMARY KEY, username TEXT,
-//			   password TEXT)`
-//	statement, err := db.Prepare(userTable)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	statement.Exec()
-//}
-
 func CreateMeasurementsDB() {
-	db, err := sql.Open("sqlite3", dbMeasurements)
-	if err != nil {
-		log.Fatal(err)
-	}
-	const measurementsTable = `CREATE TABLE IF NOT EXISTS
-				   measurements(id INTEGER PRIMARY KEY,
-				   temperature REAL, humidity REAL)`
+	query := `CREATE TABLE IF NOT EXISTS 
+			measurements(id INTEGER PRIMARY KEY, 
+			temperature REAL, humidity REAL)`
+	SimpleQuery(DriverDB, dbMeasurements, query)
+}
 
-        statement, err := db.Prepare(measurementsTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
+func CreateDB() {
+	//TODO: rename function to something more relative
+	//TODO: rename lights table to twoState
+	//TODO: rename database name to something more relative
+
+	twoStateQuery := `CREATE TABLE IF NOT EXISTS 
+			lights(id INTEGER PRIMARY KEY, displayname TEXT, 
+			name TEXT, state TEXT, topic TEXT)`
+	SimpleQuery(DriverDB, dbName, twoStateQuery)
+
+	ledStripQuery := `CREATE TABLE IF NOT EXISTS 
+				  ledstrips(id INTEGER PRIMARY KEY,
+				  displayname TEXT, name TEXT, state TEXT,
+				  color TEXT, topic TEXT)`
+	SimpleQuery(DriverDB, dbName, ledStripQuery)
 }
 
 func AddTempHum(temperature float64, humidity float64) {
@@ -296,33 +292,6 @@ func DBexists() {
 
 }
 
-func CreateDB() {
-	db, err := sql.Open("sqlite3", dbName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	const twoStateTable = `CREATE TABLE IF NOT EXISTS 
-			     lights(id INTEGER PRIMARY KEY, displayname TEXT,
-			     name TEXT, state TEXT, topic TEXT)`
-
-	const ledstripsTable = `CREATE TABLE IF NOT EXISTS
-			       ledstrips(id INTEGER PRIMARY KEY,
-			       displayname TEXT, name TEXT, state TEXT,
-			       color TEXT, topic TEXT)`
-
-	statement, err := db.Prepare(twoStateTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
-
-	statement, err = db.Prepare(ledstripsTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
-}
 
 func InsertAll() {
 	db, err := sql.Open("sqlite3", dbName)
