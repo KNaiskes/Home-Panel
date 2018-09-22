@@ -75,7 +75,7 @@ func CreateDB() {
 }
 
 func AddTempHum(temperature float64, humidity float64) {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,7 +88,7 @@ func AddTempHum(temperature float64, humidity float64) {
 }
 
 func GetTemperature() []float64 {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,7 +107,7 @@ func GetTemperature() []float64 {
 }
 
 func GetHumidity() []float64 {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -126,7 +126,7 @@ func GetHumidity() []float64 {
 }
 
 func AddUser(username string, password string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -142,7 +142,7 @@ func AddUser(username string, password string) {
 }
 
 func CheckUser(username string, password string) bool {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -158,7 +158,7 @@ func CheckUser(username string, password string) bool {
 }
 
 func UserExists(username string) bool {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,7 +174,7 @@ func UserExists(username string) bool {
 }
 
 func DelUser(username string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -187,7 +187,7 @@ func DelUser(username string) {
 }
 
 func ShowUsers() []string {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -208,7 +208,7 @@ func ShowUsers() []string {
 }
 
 func UpdatePassword(username string, password string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -239,7 +239,7 @@ func InsertKnownDevices() []TwoState {
 }
 
 func DeviceExists(displayname string, name string, topic string) bool {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -256,7 +256,7 @@ func DeviceExists(displayname string, name string, topic string) bool {
 }
 
 func AddTwoStateDevice(displayname string, name string, topic string) bool {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -294,7 +294,7 @@ func DBexists() {
 
 
 func InsertAll() {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -318,7 +318,7 @@ func InsertAll() {
 }
 
 func DBtwoStateDevices() []TwoState{
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -346,7 +346,7 @@ func DBtwoStateDevices() []TwoState{
 }
 
 func UpdateTwoState(name string, state string) {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -361,7 +361,7 @@ func UpdateTwoState(name string, state string) {
 }
 
 func UpdateLedstrip(name string, color string, state string) {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -375,7 +375,7 @@ func UpdateLedstrip(name string, color string, state string) {
 }
 
 func DBledstrips() []LedStrip {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
