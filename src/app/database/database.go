@@ -28,40 +28,54 @@ const dbName = dbDir + "home.db"
 const dbUsers = dbDir + "users.db"
 const dbMeasurements = dbDir + "measurements.db"
 
-func CreateUsersDB() {
-	db, err := sql.Open("sqlite3", dbUsers)
+const DriverDB = "sqlite3"
+
+func SimpleQuery(driver string, dbName string, query string) {
+	db, err := sql.Open(driver, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	const userTable = `CREATE TABLE IF NOT EXISTS
-			   users(id INTEGER PRIMARY KEY, username TEXT,
-			   password TEXT)`
-	statement, err := db.Prepare(userTable)
+	statement, err := db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	statement.Exec()
+}
+
+func CreateUsersDB() {
+	query := `CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,
+			username TEXT, password TEXT)`
+	SimpleQuery(DriverDB, dbUsers, query)
+
+
 }
 
 func CreateMeasurementsDB() {
-	db, err := sql.Open("sqlite3", dbMeasurements)
-	if err != nil {
-		log.Fatal(err)
-	}
-	const measurementsTable = `CREATE TABLE IF NOT EXISTS
-				   measurements(id INTEGER PRIMARY KEY,
-				   temperature REAL, humidity REAL)`
+	query := `CREATE TABLE IF NOT EXISTS 
+			measurements(id INTEGER PRIMARY KEY, 
+			temperature REAL, humidity REAL)`
+	SimpleQuery(DriverDB, dbMeasurements, query)
+}
 
-        statement, err := db.Prepare(measurementsTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
+func CreateDB() {
+	//TODO: rename function to something more relative
+	//TODO: rename lights table to twoState
+	//TODO: rename database name to something more relative
+
+	twoStateQuery := `CREATE TABLE IF NOT EXISTS 
+			lights(id INTEGER PRIMARY KEY, displayname TEXT, 
+			name TEXT, state TEXT, topic TEXT)`
+	SimpleQuery(DriverDB, dbName, twoStateQuery)
+
+	ledStripQuery := `CREATE TABLE IF NOT EXISTS 
+				  ledstrips(id INTEGER PRIMARY KEY,
+				  displayname TEXT, name TEXT, state TEXT,
+				  color TEXT, topic TEXT)`
+	SimpleQuery(DriverDB, dbName, ledStripQuery)
 }
 
 func AddTempHum(temperature float64, humidity float64) {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -74,7 +88,7 @@ func AddTempHum(temperature float64, humidity float64) {
 }
 
 func GetTemperature() []float64 {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,7 +107,7 @@ func GetTemperature() []float64 {
 }
 
 func GetHumidity() []float64 {
-	db, err := sql.Open("sqlite3", dbMeasurements)
+	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -112,7 +126,7 @@ func GetHumidity() []float64 {
 }
 
 func AddUser(username string, password string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -128,7 +142,7 @@ func AddUser(username string, password string) {
 }
 
 func CheckUser(username string, password string) bool {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,7 +158,7 @@ func CheckUser(username string, password string) bool {
 }
 
 func UserExists(username string) bool {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -160,7 +174,7 @@ func UserExists(username string) bool {
 }
 
 func DelUser(username string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -173,7 +187,7 @@ func DelUser(username string) {
 }
 
 func ShowUsers() []string {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -194,7 +208,7 @@ func ShowUsers() []string {
 }
 
 func UpdatePassword(username string, password string) {
-	db, err := sql.Open("sqlite3", dbUsers)
+	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -225,7 +239,7 @@ func InsertKnownDevices() []TwoState {
 }
 
 func DeviceExists(displayname string, name string, topic string) bool {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -242,7 +256,7 @@ func DeviceExists(displayname string, name string, topic string) bool {
 }
 
 func AddTwoStateDevice(displayname string, name string, topic string) bool {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -278,36 +292,9 @@ func DBexists() {
 
 }
 
-func CreateDB() {
-	db, err := sql.Open("sqlite3", dbName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	const twoStateTable = `CREATE TABLE IF NOT EXISTS 
-			     lights(id INTEGER PRIMARY KEY, displayname TEXT,
-			     name TEXT, state TEXT, topic TEXT)`
-
-	const ledstripsTable = `CREATE TABLE IF NOT EXISTS
-			       ledstrips(id INTEGER PRIMARY KEY,
-			       displayname TEXT, name TEXT, state TEXT,
-			       color TEXT, topic TEXT)`
-
-	statement, err := db.Prepare(twoStateTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
-
-	statement, err = db.Prepare(ledstripsTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	statement.Exec()
-}
 
 func InsertAll() {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -331,7 +318,7 @@ func InsertAll() {
 }
 
 func DBtwoStateDevices() []TwoState{
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -359,7 +346,7 @@ func DBtwoStateDevices() []TwoState{
 }
 
 func UpdateTwoState(name string, state string) {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -374,7 +361,7 @@ func UpdateTwoState(name string, state string) {
 }
 
 func UpdateLedstrip(name string, color string, state string) {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -388,7 +375,7 @@ func UpdateLedstrip(name string, color string, state string) {
 }
 
 func DBledstrips() []LedStrip {
-	db, err := sql.Open("sqlite3", dbName)
+	db, err := sql.Open(DriverDB, dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
