@@ -1,0 +1,44 @@
+body { 
+	background: #F7F7F7;
+}
+
+#formPosition {
+	margin: 75px auto auto;
+	background-color: #FBFBFB;
+	border: 1px solid #F7F7F7;
+	font-size: 20px;
+}
+
+input[type=text], input[type=password] {
+	background-color: #FBFBFB;
+	width: 500px;
+	border: 1px solid #006666;
+	height: 50px;
+	display: block;
+	font-size: 18px;
+}
+
+input[type=submit]{
+	background-color: #DE0607;
+	color: white;
+	padding: 14px 20px;
+	margin: 20px 0 0;
+	border: none;
+	cursor: pointer;
+	display: block;
+	width: 500px;
+	font-size: 18px;
+}
+
+ul { list-style: none; }
+
+#deviceList {
+	background-color: #F9F9F9;
+	float: bottom;
+	width: 500px;
+	overflow-y: auto;
+	height: 300px;
+	margin-top: 2em;
+	margin-bottom: 1em;
+	clear: both;
+}

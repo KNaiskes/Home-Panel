@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="src/app/html/static/removeTwoStateDevice.css">
+		<title> Remove a Device </title>
+
+		<div id="switchLink">
+		<a href="/admin-panel"> &#9935; Switch to Admin Panel </a>
+		</div>
+	</head>
+
+	<body>
+		<p>
+		<center> <h2> Remove a Device </h2></center>
+		</p>
+
+		<center>
+			<p>
+			<div id="deviceName">
+			<ul>
+			{{range $n := .}}
+			<li><h4>{{$n}}</h4></li>
+			{{end}}
+			</ul>
+			</div>
+			</p>
+			<form action="" method="POST">
+				<p>
+				<input type="text" placeholder="Device Name"
+				name="deviceName" value="" required>
+				</p>
+				<input type="submit" value="Submit">
+			</form>
+		</center>
+
+	</body>
+
+</html>
