@@ -130,7 +130,6 @@ func AddUser(username string, password string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//TODO: let users know why their username or password are not acceptable 
 	if len(username) >= 5 && len(password) >= 5 {
 		const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
 		statement, err := db.Prepare(insertUser)
@@ -272,6 +271,50 @@ func AddTwoStateDevice(displayname string, name string, topic string) bool {
 		return true
 	}
 	return false
+}
+
+func RemoveTwoStateDevice(name string) bool {
+	db, err := sql.Open(DriverDB, dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	const deviceExists = `SELECT name FROM lights WHERE name=?`
+	const deleteDevice = `DELETE FROM lights WHERE name=?`
+
+	err = db.QueryRow(deviceExists, name).Scan(&name)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
+	statement, err := db.Prepare(deleteDevice)
+	statement.Exec(&name)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return true
+}
+
+func AvailableDevices() []string {
+	db, err := sql.Open(DriverDB, dbName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var deviceName string
+	devices := []string{}
+
+	const getDevices = `SELECT name FROM lights`
+
+	rows, err := db.Query(getDevices)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for rows.Next() {
+		rows.Scan(&deviceName)
+		devices = append(devices, deviceName)
+	}
+	return devices
 }
 
 func DBexists() {

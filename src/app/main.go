@@ -49,6 +49,7 @@ func main() {
 	http.HandleFunc("/delUser", deleteUserHandler)
 	http.HandleFunc("/updatePass", updatePassHandler)
 	http.HandleFunc("/addNewDevice", addNewDeviceHandler)
+	http.HandleFunc("/removeDevice", removeTwoStateDeviceHandler)
 	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
 		http.FileServer(http.Dir("src/app/html/static/"))))
 
@@ -352,6 +353,26 @@ func addNewDeviceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = tmpl.Execute(w, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func removeTwoStateDeviceHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name", w, r)
+	isAdmin(w, r)
+
+	name := r.FormValue("deviceName")
+
+	fp := "src/app/html/templates/removeTwoStateDevice.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	database.RemoveTwoStateDevice(name)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, database.AvailableDevices())
 	if err != nil {
 		log.Fatal(err)
 	}
