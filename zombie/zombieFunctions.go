@@ -1,7 +1,7 @@
 package main
 
 import (
-	"app/mqtt"
+	"github.com/KNaiskes/Home-Panel/mqtt"
 	"time"
 )
 

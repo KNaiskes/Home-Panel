@@ -23,7 +23,7 @@ type TwoState struct {
 	Topic       string
 }
 
-const dbDir = "src/app/db/"
+const dbDir = "src/github.com/KNaiskes/Home-Panel/db/"
 const dbName = dbDir + "home.db"
 const dbUsers = dbDir + "users.db"
 const dbMeasurements = dbDir + "measurements.db"
