@@ -52,8 +52,8 @@ func main() {
 	http.HandleFunc("/updatePass", updatePassHandler)
 	http.HandleFunc("/addNewDevice", addNewDeviceHandler)
 	http.HandleFunc("/removeDevice", removeTwoStateDeviceHandler)
-	http.Handle("/src/app/html/static/", http.StripPrefix("/src/app/html/static/",
-		http.FileServer(http.Dir("src/app/html/static/"))))
+	http.Handle("/src/github.com/KNaiskes/Home-Panel/html/static/", http.StripPrefix("/src/github.com/KNaiskes/Home-Panel/html/static/",
+		http.FileServer(http.Dir("src/github.com/KNaiskes/Home-Panel/html/static/"))))
 
 	http.ListenAndServe(":8080", nil)
 
