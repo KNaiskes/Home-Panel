@@ -5,8 +5,8 @@ import (
 	"log"
 	"fmt"
 	"net/http"
-	"app/mqtt"
-	"app/database"
+	"github.com/KNaiskes/Home-Panel/mqtt"
+	"github.com/KNaiskes/Home-Panel/database"
 	"github.com/gorilla/sessions"
 )
 

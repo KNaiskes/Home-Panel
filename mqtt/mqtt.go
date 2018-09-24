@@ -2,7 +2,7 @@ package mqtt
 
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
-	"app/database"
+	"github.com/KNaiskes/Home-Panel/database"
 	"os"
 	"os/signal"
 	"syscall"
