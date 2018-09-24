@@ -1,8 +1,8 @@
 package main
 
 import (
-	"app/mqtt"
-	"app/database"
+	"github.com/KNaiskes/Home-Panel/mqtt"
+	"github.com/KNaiskes/Home-Panel/database"
 )
 
 func main() {
