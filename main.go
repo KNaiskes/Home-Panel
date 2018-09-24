@@ -10,6 +10,8 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+var htmlTemplates = "src/github.com/KNaiskes/Home-Panel/html/templates/"
+
 type AddUserMessages struct {
 	UsernameLength int
 	PasswordLength int
@@ -85,7 +87,7 @@ func isAdmin(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fp := "src/app/html/templates/index.html"
+	fp := htmlTemplates + "index.html"
 	tmpl, err := template.ParseFiles(fp)
 
 
@@ -130,7 +132,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	}
 
-	fp := "src/app/html/templates/login.html"
+	fp := htmlTemplates + "login.html"
 
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
@@ -145,7 +147,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 
-	fp := "src/app/html/templates/dashboard.html"
+	fp := htmlTemplates + "dashboard.html"
 
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
@@ -161,7 +163,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 
-	fp := "src/app/html/templates/ledstrip.html"
+	fp := htmlTemplates + "ledstrip.html"
 
 	for _, ledstrip := range database.DBledstrips() {
 		ledstrip_state := r.FormValue(ledstrip.Name)
@@ -200,7 +202,7 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 func twoStateDevicesHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 
-	fp := "src/app/html/templates/twoState.html"
+	fp := htmlTemplates + "twoState.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	for _, device := range database.DBtwoStateDevices() {
@@ -234,7 +236,7 @@ func adminPanelHandler(w http.ResponseWriter, r *http.Request) {
 	//	http.Redirect(w, r, "dashboard", http.StatusSeeOther)
 	//}
 
-	fp := "src/app/html/templates/adminPanel.html"
+	fp := htmlTemplates + "adminPanel.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
@@ -259,7 +261,7 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 
 	Messages := AddUserMessages{lenUsername, lenPassword, userExists}
 
-	fp := "src/app/html/templates/addUser.html"
+	fp := htmlTemplates + "addUser.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
@@ -289,7 +291,7 @@ func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	Messages := DelUserMessages{lenUsername, UserExists, usersList}
 
-	fp := "src/app/html/templates/delUser.html"
+	fp := htmlTemplates + "delUser.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
@@ -319,7 +321,7 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 
 	Messages := UpdatePasswordMessages{userExists, lenUsername, lenPassword, usersList}
 
-	fp := "src/app/html/templates/updatePass.html"
+	fp := htmlTemplates + "updatePass.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	if err != nil {
@@ -343,7 +345,7 @@ func addNewDeviceHandler(w http.ResponseWriter, r *http.Request) {
 	dispayName := r.FormValue("displayName")
 	mqttTopic := r.FormValue("deviceMqtt")
 
-	fp := "src/app/html/templates/addNewDevice.html"
+	fp := htmlTemplates + "addNewDevice.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	database.AddTwoStateDevice(name, dispayName, mqttTopic)
@@ -364,7 +366,7 @@ func removeTwoStateDeviceHandler(w http.ResponseWriter, r *http.Request) {
 
 	name := r.FormValue("deviceName")
 
-	fp := "src/app/html/templates/removeTwoStateDevice.html"
+	fp := htmlTemplates + "removeTwoStateDevice.html"
 	tmpl, err := template.ParseFiles(fp)
 
 	database.RemoveTwoStateDevice(name)
