@@ -15,7 +15,7 @@ var htmlTemplates = "src/github.com/KNaiskes/Home-Panel/html/templates/"
 type AddUserMessages struct {
 	UsernameLength int
 	PasswordLength int
-	UsernameExists bool
+	AddedUser bool
 }
 
 type UpdatePasswordMessages struct {
@@ -257,9 +257,9 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 
 	lenUsername := len(registerUsername)
 	lenPassword := len(registerPassword)
-	userExists  := database.UserExists(registerUsername)
+	userAdded := database.AddUser(registerUsername, registerPassword)
 
-	Messages := AddUserMessages{lenUsername, lenPassword, userExists}
+	Messages := AddUserMessages{lenUsername, lenPassword, userAdded}
 
 	fp := htmlTemplates + "addUser.html"
 	tmpl, err := template.ParseFiles(fp)
@@ -273,10 +273,7 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-
-	if !database.UserExists(registerUsername) {
-		database.AddUser(registerUsername, registerPassword)
-	}
+	//database.AddUser(registerUsername, registerPassword)
 }
 
 func deleteUserHandler(w http.ResponseWriter, r *http.Request) {

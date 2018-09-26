@@ -125,19 +125,34 @@ func GetHumidity() []float64 {
 	return metrics
 }
 
-func AddUser(username string, password string) {
+func AddUser(username string, password string) bool {
 	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
-	if len(username) >= 5 && len(password) >= 5 {
-		const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
-		statement, err := db.Prepare(insertUser)
-		statement.Exec(username, password)
-		if err != nil {
+	/*
+	const userExists = `SELECT username FROM users WHERE username=?`
+
+	err = db.QueryRow(userExists, username).Scan(&username)
+	if err != nil {
+		if err != sql.ErrNoRows {
 			log.Fatal(err)
 		}
+		return false
 	}
+	*/
+	if !UserExists(username) {
+		if len(username) >= 5 && len(password) >= 5 {
+			const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
+			statement, err := db.Prepare(insertUser)
+			statement.Exec(username, password)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		return true
+	}
+	return false
 }
 
 func CheckUser(username string, password string) bool {
@@ -156,6 +171,7 @@ func CheckUser(username string, password string) bool {
 	return true
 }
 
+
 func UserExists(username string) bool {
 	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
@@ -172,17 +188,28 @@ func UserExists(username string) bool {
 	return true
 }
 
-func DelUser(username string) {
+
+func DelUser(username string) bool {
 	db, err := sql.Open(DriverDB, dbUsers)
 	if err != nil {
 		log.Fatal(err)
 	}
+	const userExists = `SELECT username FROM users WHERE username=?`
 	const delUser = `DELETE FROM users WHERE username=?`
+
+	err = db.QueryRow(userExists, username).Scan(&username)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		return false
+	}
 	statement, err := db.Prepare(delUser)
 	statement.Exec(&username)
 	if err != nil {
 		log.Fatal(err)
 	}
+	return true
 }
 
 func ShowUsers() []string {
