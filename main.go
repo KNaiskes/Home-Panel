@@ -60,9 +60,6 @@ func main() {
 }
 
 func isLoggedIn(sessionName string, w http.ResponseWriter, r *http.Request) {
-	// if user is logged in - create their session
-	// else redirect them to log in page
-
 	session, err := store.Get(r, sessionName)
 	if err != nil {
 		log.Fatal(err)
@@ -76,7 +73,6 @@ func isLoggedIn(sessionName string, w http.ResponseWriter, r *http.Request) {
 }
 
 func isAdmin(w http.ResponseWriter, r *http.Request) {
-	// allow access to some pages only to admin
 	session, err := store.Get(r, "cookie-name")
 	if err != nil {
 		log.Fatal(err)
