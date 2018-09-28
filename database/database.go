@@ -130,17 +130,6 @@ func AddUser(username string, password string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	/*
-	const userExists = `SELECT username FROM users WHERE username=?`
-
-	err = db.QueryRow(userExists, username).Scan(&username)
-	if err != nil {
-		if err != sql.ErrNoRows {
-			log.Fatal(err)
-		}
-		return false
-	}
-	*/
 	if !UserExists(username) {
 		if len(username) >= 5 && len(password) >= 5 {
 			const insertUser = `INSERT INTO users(username, password) VALUES (?, ?)`
