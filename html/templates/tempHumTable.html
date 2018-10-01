@@ -17,19 +17,18 @@
 			<table>
 				<tr>
 					<th> Temperature </th>
-					<th> Humidity </th>
-				</tr>
-				<tr>
 					{{range $t := $.Temperature}}
 					<td> {{$t}} </td>
+					{{end}}
 				</tr>
-				{{end}}
 				<tr>
-				{{range $h := $.Humidity}}
-				<td> {{$h}} </td>
+					<th> Humidity </th>
+					{{range $h := $.Humidity}}
+					<td> {{$h}} </td>
+					{{end}}
 				</tr>
-				{{end}}
 			</table>
+			
 		</center>
 	</body>
 
