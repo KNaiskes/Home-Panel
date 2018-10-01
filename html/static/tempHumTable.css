@@ -1,0 +1,36 @@
+body {
+	background-color: #F8F8FA
+}
+
+p {
+	font-size: 20px;
+}
+
+a { 
+	color: #000000;
+	text-decoration: none;
+}
+
+
+table {
+    font-family: sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 4px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+#switchLink a {
+	text-decoration:none;
+	color: #000000;
+	font-size: 18px;
+	font-style: italic;
+}
