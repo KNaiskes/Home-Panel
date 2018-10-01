@@ -14,14 +14,22 @@
 
 	<body>
 		<center>
-			<ul>
-			{{range $n := $.Temperature}}
-			<li><h4>{{$n}}</h4></li>
-			{{end}}
-			{{range $n := $.Humidity}}
-			<li><h4>{{$n}}</h4></li>
-			{{end}}
-			</ul>
+			<table>
+				<tr>
+					<th> Temperature </th>
+					<th> Humidity </th>
+				</tr>
+				<tr>
+					{{range $t := $.Temperature}}
+					<td> {{$t}} </td>
+				</tr>
+				{{end}}
+				<tr>
+				{{range $h := $.Humidity}}
+				<td> {{$h}} </td>
+				</tr>
+				{{end}}
+			</table>
 		</center>
 	</body>
 
