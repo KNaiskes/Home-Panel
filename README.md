@@ -1,10 +1,7 @@
 ## Home-Panel
 
+### Support
 
-### Install dependencies
-
-```
-go get github.com/mattn/go-sqlite3
-go get github.com/eclipse/paho.mqtt.golang
-go get github.com/gorilla/sessions
-```
+- Relay devices
+- Led strips
+- Temperature and Humidity sensor (DHT22)
