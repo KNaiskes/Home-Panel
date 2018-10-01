@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="src/github.com/
+							KNaiskes/Home-Panel/html/
+							static/tempHumTable.css">
+		<title> Temperature and Humidity Measurements </title>
+
+		<div id="switchLink">
+		<a href="/dashboard"> &#9776; Switch to dashboard </a>
+		</div>
+	</head>
+
+	<body>
+		<center>
+			<ul>
+			{{range $n := $.Temperature}}
+			<li><h4>{{$n}}</h4></li>
+			{{end}}
+			{{range $n := $.Humidity}}
+			<li><h4>{{$n}}</h4></li>
+			{{end}}
+			</ul>
+		</center>
+	</body>
+
+</html>

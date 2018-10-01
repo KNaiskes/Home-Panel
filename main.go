@@ -37,6 +37,11 @@ type DelUserMessages struct {
 	UsernamesList []string
 }
 
+type Measurements struct {
+	Temperature []float64
+	Humidity    []float64
+}
+
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
 var userIsAdmin bool
 
@@ -52,6 +57,7 @@ func main() {
 	http.HandleFunc("/updatePass", updatePassHandler)
 	http.HandleFunc("/addNewDevice", addNewDeviceHandler)
 	http.HandleFunc("/removeDevice", removeTwoStateDeviceHandler)
+	http.HandleFunc("/temperatureHum", tempHumHandler)
 	http.Handle("/src/github.com/KNaiskes/Home-Panel/html/static/", http.StripPrefix("/src/github.com/KNaiskes/Home-Panel/html/static/",
 		http.FileServer(http.Dir("src/github.com/KNaiskes/Home-Panel/html/static/"))))
 
@@ -368,6 +374,26 @@ func removeTwoStateDeviceHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	err = tmpl.Execute(w, database.AvailableDevices())
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func tempHumHandler(w http.ResponseWriter, r *http.Request) {
+	isLoggedIn("cookie-name", w, r)
+
+	fp := htmlTemplates + "tempHumTable.html"
+	tmpl, err := template.ParseFiles(fp)
+
+	temperature := database.GetTemperature()
+	humidity := database.GetHumidity()
+
+	measurements := Measurements{temperature, humidity}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = tmpl.Execute(w, measurements)
 	if err != nil {
 		log.Fatal(err)
 	}
