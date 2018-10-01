@@ -113,7 +113,7 @@ func GetHumidity() []float64 {
 	}
 	metrics := []float64{}
 	var Humidity float64
-	const getHumTable = `SELECT temperature FROM measurements`
+	const getHumTable = `SELECT humidity FROM measurements`
 	rows, err := db.Query(getHumTable)
 	if err != nil {
 		log.Fatal(err)
