@@ -385,8 +385,7 @@ func tempHumHandler(w http.ResponseWriter, r *http.Request) {
 	fp := htmlTemplates + "tempHumTable.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	temperature := database.GetTemperature()
-	humidity := database.GetHumidity()
+	temperature, humidity := database.GetTempHum()
 
 	measurements := Measurements{temperature, humidity}
 
