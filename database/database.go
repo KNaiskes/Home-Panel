@@ -87,42 +87,40 @@ func AddTempHum(temperature float64, humidity float64) {
 	}
 }
 
-func GetTemperature() []float64 {
+func GetTempHum() ([]float64, []float64) {
 	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
 	}
-	metrics := []float64{}
+
 	var Temperature float64
-	const getTempTable = `SELECT temperature FROM measurements`
-	rows, err := db.Query(getTempTable)
+	var Humidity float64
+
+	tempMetrics := []float64{}
+	humMetrics := []float64{}
+
+	const getTemperauteTable = `SELECT temperature FROM measurements`
+	const getHumidityTable = `SELECT humidity FROM measurements`
+
+	// temperature
+	rows, err := db.Query(getTemperauteTable)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for rows.Next() {
 		rows.Scan(&Temperature)
-		metrics = append(metrics, Temperature )
+		tempMetrics = append(tempMetrics, Temperature)
 	}
-	return metrics
-}
-
-func GetHumidity() []float64 {
-	db, err := sql.Open(DriverDB, dbMeasurements)
-	if err != nil {
-		log.Fatal(err)
-	}
-	metrics := []float64{}
-	var Humidity float64
-	const getHumTable = `SELECT humidity FROM measurements`
-	rows, err := db.Query(getHumTable)
+	// humidity
+	rows, err = db.Query(getHumidityTable)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for rows.Next() {
 		rows.Scan(&Humidity)
-		metrics = append(metrics, Humidity )
+		humMetrics = append(humMetrics, Humidity)
 	}
-	return metrics
+	return tempMetrics, humMetrics
 }
 
 func AddUser(username string, password string) bool {
