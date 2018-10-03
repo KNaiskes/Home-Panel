@@ -38,8 +38,9 @@ type DelUserMessages struct {
 }
 
 type Measurements struct {
-	Temperature []float64
-	Humidity    []float64
+	Temperature []string
+	Humidity    []string
+	DateTime    []string
 }
 
 var store = sessions.NewCookieStore([]byte("keep-it-safe-keep-it-secret"))
@@ -385,9 +386,27 @@ func tempHumHandler(w http.ResponseWriter, r *http.Request) {
 	fp := htmlTemplates + "tempHumTable.html"
 	tmpl, err := template.ParseFiles(fp)
 
-	temperature, humidity := database.GetTempHum()
+	metrics := database.GetTempHum()
 
-	measurements := Measurements{temperature, humidity}
+	var temperature     []string
+	var humidity        []string
+	var dateTime        []string
+
+	for  t := 0; t < len(metrics); t += 3 {
+		temperature = append(temperature, metrics[t])
+	}
+	for h := 1; h < len(metrics); h += 3 {
+		humidity = append(humidity, metrics[h])
+	}
+	for d := 2; d < len(metrics); d += 3 {
+		dateTime = append(dateTime, metrics[d])
+	}
+
+	fmt.Println("Temperature: ", temperature)
+	fmt.Println("Humidity: ", humidity)
+	fmt.Println("Time: ", dateTime)
+
+	measurements := Measurements{temperature, humidity, dateTime}
 
 	if err != nil {
 		log.Fatal(err)

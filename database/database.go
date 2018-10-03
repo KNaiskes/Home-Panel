@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"fmt"
+	"time"
+	"strconv"
 )
 
 type LedStrip struct {
@@ -53,7 +55,7 @@ func CreateUsersDB() {
 func CreateMeasurementsDB() {
 	query := `CREATE TABLE IF NOT EXISTS 
 			measurements(id INTEGER PRIMARY KEY, 
-			temperature REAL, humidity REAL)`
+			temperature REAL, humidity REAL, timedate TEXT)`
 	SimpleQuery(DriverDB, dbMeasurements, query)
 }
 
@@ -79,15 +81,17 @@ func AddTempHum(temperature float64, humidity float64) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	const addTemperatureTable = `INSERT INTO measurements(temperature, humidity) VALUES(?, ?)`
+	setTime := time.Now().Format(time.ANSIC)
+	const addTemperatureTable = `INSERT INTO 
+		measurements(temperature, humidity, timedate) VALUES(?, ?, ?)`
 	statement, err := db.Prepare(addTemperatureTable)
-	statement.Exec(temperature, humidity)
+	statement.Exec(temperature, humidity, setTime)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func GetTempHum() ([]float64, []float64) {
+func GetTempHum() []string {
 	db, err := sql.Open(DriverDB, dbMeasurements)
 	if err != nil {
 		log.Fatal(err)
@@ -95,32 +99,60 @@ func GetTempHum() ([]float64, []float64) {
 
 	var Temperature float64
 	var Humidity float64
+	var Time string
 
-	tempMetrics := []float64{}
-	humMetrics := []float64{}
+	measurements := []string{}
+	//tempMetrics := []float64{}
+	//humMetrics := []float64{}
+	//timeSlice := []string{}
 
-	const getTemperauteTable = `SELECT temperature FROM measurements`
-	const getHumidityTable = `SELECT humidity FROM measurements`
+	//const getTemperauteTable = `SELECT temperature FROM measurements`
+	//const getHumidityTable = `SELECT humidity FROM measurements`
+	//const getTimeTable = `SELECT timedate FROM measurements`
 
-	// temperature
-	rows, err := db.Query(getTemperauteTable)
+	const query = `SELECT temperature, humidity, timedate FROM measurements`
+
+	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for rows.Next() {
-		rows.Scan(&Temperature)
-		tempMetrics = append(tempMetrics, Temperature)
+		rows.Scan(&Temperature, &Humidity, &Time)
+		tempTemperature := strconv.FormatFloat(Temperature, 'f', -1, 64)
+		tempHumdity := strconv.FormatFloat(Humidity, 'f', -1, 64)
+		measurements = append(measurements, tempTemperature, tempHumdity, Time)
 	}
-	// humidity
-	rows, err = db.Query(getHumidityTable)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for rows.Next() {
-		rows.Scan(&Humidity)
-		humMetrics = append(humMetrics, Humidity)
-	}
-	return tempMetrics, humMetrics
+
+	//// temperature
+	//rows, err := db.Query(getTemperauteTable)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//for rows.Next() {
+	//	rows.Scan(&Temperature)
+	//	tempMetrics = append(tempMetrics, Temperature)
+	//}
+	//// humidity
+	//rows, err = db.Query(getHumidityTable)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//for rows.Next() {
+	//	rows.Scan(&Humidity)
+	//	humMetrics = append(humMetrics, Humidity)
+	//}
+	//// timedate
+	//rows, err = db.Query(getTimeTable)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//for rows.Next() {
+	//	rows.Scan(&Time)
+	//	timeSlice = append(timeSlice, Time)
+	//}
+	//fmt.Println("Time date : ", timeSlice)
+	//return tempMetrics, humMetrics
+	return measurements
 }
 
 func AddUser(username string, password string) bool {
