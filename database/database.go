@@ -81,7 +81,13 @@ func AddTempHum(temperature float64, humidity float64) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	setTime := time.Now().Format(time.ANSIC)
+	currentHour := time.Now().Hour()
+	currentMinute := time.Now().Minute()
+
+	hourToString := strconv.Itoa(currentHour)
+	minuteToString := strconv.Itoa(currentMinute)
+
+	setTime := hourToString + ":" + minuteToString
 	const addTemperatureTable = `INSERT INTO 
 		measurements(temperature, humidity, timedate) VALUES(?, ?, ?)`
 	statement, err := db.Prepare(addTemperatureTable)
