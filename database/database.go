@@ -81,7 +81,13 @@ func AddTempHum(temperature float64, humidity float64) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	setTime := time.Now().Format(time.ANSIC)
+	currentHour := time.Now().Hour()
+	currentMinute := time.Now().Minute()
+
+	hourToString := strconv.Itoa(currentHour)
+	minuteToString := strconv.Itoa(currentMinute)
+
+	setTime := hourToString + ":" + minuteToString
 	const addTemperatureTable = `INSERT INTO 
 		measurements(temperature, humidity, timedate) VALUES(?, ?, ?)`
 	statement, err := db.Prepare(addTemperatureTable)
@@ -102,13 +108,6 @@ func GetTempHum() []string {
 	var Time string
 
 	measurements := []string{}
-	//tempMetrics := []float64{}
-	//humMetrics := []float64{}
-	//timeSlice := []string{}
-
-	//const getTemperauteTable = `SELECT temperature FROM measurements`
-	//const getHumidityTable = `SELECT humidity FROM measurements`
-	//const getTimeTable = `SELECT timedate FROM measurements`
 
 	const query = `SELECT temperature, humidity, timedate FROM measurements`
 
@@ -123,35 +122,6 @@ func GetTempHum() []string {
 		measurements = append(measurements, tempTemperature, tempHumdity, Time)
 	}
 
-	//// temperature
-	//rows, err := db.Query(getTemperauteTable)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//for rows.Next() {
-	//	rows.Scan(&Temperature)
-	//	tempMetrics = append(tempMetrics, Temperature)
-	//}
-	//// humidity
-	//rows, err = db.Query(getHumidityTable)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//for rows.Next() {
-	//	rows.Scan(&Humidity)
-	//	humMetrics = append(humMetrics, Humidity)
-	//}
-	//// timedate
-	//rows, err = db.Query(getTimeTable)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//for rows.Next() {
-	//	rows.Scan(&Time)
-	//	timeSlice = append(timeSlice, Time)
-	//}
-	//fmt.Println("Time date : ", timeSlice)
-	//return tempMetrics, humMetrics
 	return measurements
 }
 
