@@ -16,9 +16,11 @@ table {
     font-family: sans-serif;
     border-collapse: collapse;
     width: 100%;
+    margin: 75px auto auto;
 }
 
 td, th {
+    font-size: 15px;
     border: 1px solid #dddddd;
     text-align: left;
     padding: 4px;
