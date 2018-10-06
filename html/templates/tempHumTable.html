@@ -16,6 +16,12 @@
 		<center>
 			<table>
 				<tr>
+				<tr>
+					<th> Time </th>
+					{{range $d := $.Time}}
+					<td> {{$d}} </td>
+					{{end}}
+					</tr>
 					<th> Temperature </th>
 					{{range $t := $.Temperature}}
 					<td> {{$t}} </td>
@@ -25,12 +31,6 @@
 					<th> Humidity </th>
 					{{range $h := $.Humidity}}
 					<td> {{$h}} </td>
-					{{end}}
-				</tr>
-				<tr>
-					<th> Time </th>
-					{{range $d := $.Time}}
-					<td> {{$d}} </td>
 					{{end}}
 				</tr>
 			</table>
