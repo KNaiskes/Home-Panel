@@ -11,5 +11,5 @@ notifications:
 
 before_script:
   - go get -d ./...
-  - go install github.com/KNaiskes/Home-Panel/
+  - go install github.com/KNaiskes/Home-Panel/panel
 
