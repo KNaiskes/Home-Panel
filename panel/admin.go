@@ -36,14 +36,6 @@ func adminPanelHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn("cookie-name", w, r)
 	isAdmin(w, r)
 
-	//session, err := store.Get(r, "cookie-name")
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//if session.Values["username"] != "admin" {
-	//	http.Redirect(w, r, "dashboard", http.StatusSeeOther)
-	//}
-
 	fp := htmlTemplates + "adminPanel.html"
 	tmpl, err := template.ParseFiles(fp)
 
@@ -80,8 +72,6 @@ func addUserHander(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//database.AddUser(registerUsername, registerPassword)
 }
 
 func deleteUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -147,7 +137,8 @@ func updatePassHandler(w http.ResponseWriter, r *http.Request) {
 	lenPassword := len(passwordForm)
 	usersList := database.ShowUsers()
 
-	Messages := UpdatePasswordMessages{userExists, lenUsername, lenPassword, usersList}
+	Messages := UpdatePasswordMessages{userExists, lenUsername,
+		lenPassword, usersList}
 
 	fp := htmlTemplates + "updatePass.html"
 	tmpl, err := template.ParseFiles(fp)

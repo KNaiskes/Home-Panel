@@ -34,7 +34,8 @@ func main() {
 	http.HandleFunc("/addNewDevice", addNewDeviceHandler)
 	http.HandleFunc("/removeDevice", removeTwoStateDeviceHandler)
 	http.HandleFunc("/temperatureHum", tempHumHandler)
-	http.Handle("/src/github.com/KNaiskes/Home-Panel/html/static/", http.StripPrefix("/src/github.com/KNaiskes/Home-Panel/html/static/",
+	http.Handle("/src/github.com/KNaiskes/Home-Panel/html/static/",
+		http.StripPrefix("/src/github.com/KNaiskes/Home-Panel/html/static/",
 		http.FileServer(http.Dir("src/github.com/KNaiskes/Home-Panel/html/static/"))))
 
 	http.ListenAndServe(":8080", nil)
@@ -148,22 +149,19 @@ func ledStripHandler(w http.ResponseWriter, r *http.Request) {
 		ledstrip_color := r.FormValue(ledstrip.Color)
 
 		if ledstrip_state == "true" {
-			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "true")
 			mqtt.ChangeState("on", ledstrip.Topic)
 		} else if ledstrip_state == "false" {
-			//database.UpdateLedstrip(ledstrip.Name, ledstrip_color, "false")
 			mqtt.ChangeState("off", ledstrip.Topic)
 		}
-		fmt.Println("State:", ledstrip.State)
 
 		if ledstrip_state == "" {
 			ledstrip_state = ledstrip.State
 		}
 		if ledstrip_color != "" {
-			database.UpdateLedstrip(ledstrip.Name, ledstrip_color, ledstrip_state)
+			database.UpdateLedstrip(ledstrip.Name, ledstrip_color,
+				ledstrip_state)
 			mqtt.ChangeColor(ledstrip_color, ledstrip.Topic)
 		}
-		fmt.Println("Color :", ledstrip_color)
 
 	}
 
