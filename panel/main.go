@@ -3,7 +3,6 @@ package main
 import (
 	"html/template"
 	"log"
-	"fmt"
 	"net/http"
 	"github.com/KNaiskes/Home-Panel/mqtt"
 	"github.com/KNaiskes/Home-Panel/database"
