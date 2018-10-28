@@ -26,7 +26,7 @@ type TwoState struct {
 }
 
 const dbDir = "src/github.com/KNaiskes/Home-Panel/db/"
-const dbName = dbDir + "home.db"
+const dbDevices = dbDir + "devices.db"
 const dbUsers = dbDir + "users.db"
 const dbMeasurements = dbDir + "measurements.db"
 
@@ -59,7 +59,7 @@ func CreateMeasurementsDB() {
 	SimpleQuery(DriverDB, dbMeasurements, query)
 }
 
-func CreateDB() {
+func DevicesDB() {
 	//TODO: rename function to something more relative
 	//TODO: rename lights table to twoState
 	//TODO: rename database name to something more relative
@@ -67,13 +67,13 @@ func CreateDB() {
 	twoStateQuery := `CREATE TABLE IF NOT EXISTS 
 			lights(id INTEGER PRIMARY KEY, displayname TEXT, 
 			name TEXT, state TEXT, topic TEXT)`
-	SimpleQuery(DriverDB, dbName, twoStateQuery)
+	SimpleQuery(DriverDB, dbDevices, twoStateQuery)
 
 	ledStripQuery := `CREATE TABLE IF NOT EXISTS 
 				  ledstrips(id INTEGER PRIMARY KEY,
 				  displayname TEXT, name TEXT, state TEXT,
 				  color TEXT, topic TEXT)`
-	SimpleQuery(DriverDB, dbName, ledStripQuery)
+	SimpleQuery(DriverDB, dbDevices, ledStripQuery)
 }
 
 func AddTempHum(temperature float64, humidity float64) {
@@ -254,7 +254,7 @@ func InsertKnownDevices() []TwoState {
 }
 
 func DeviceExists(displayname string, name string, topic string) bool {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -271,7 +271,7 @@ func DeviceExists(displayname string, name string, topic string) bool {
 }
 
 func AddTwoStateDevice(displayname string, name string, topic string) bool {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -290,7 +290,7 @@ func AddTwoStateDevice(displayname string, name string, topic string) bool {
 }
 
 func RemoveTwoStateDevice(name string) bool {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -313,7 +313,7 @@ func RemoveTwoStateDevice(name string) bool {
 }
 
 func AvailableDevices() []string {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -334,9 +334,9 @@ func AvailableDevices() []string {
 }
 
 func DBexists() {
-	if _, err := os.Stat(dbName); os.IsNotExist(err) {
+	if _, err := os.Stat(dbDevices); os.IsNotExist(err) {
 		os.MkdirAll(dbDir, 0700)
-		CreateDB()
+		DevicesDB()
 		InsertAll()
 	}
 	if _, err := os.Stat(dbUsers); os.IsNotExist(err) {
@@ -353,7 +353,7 @@ func DBexists() {
 
 
 func InsertAll() {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -377,7 +377,7 @@ func InsertAll() {
 }
 
 func DBtwoStateDevices() []TwoState{
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -405,7 +405,7 @@ func DBtwoStateDevices() []TwoState{
 }
 
 func UpdateTwoState(name string, state string) {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -420,7 +420,7 @@ func UpdateTwoState(name string, state string) {
 }
 
 func UpdateLedstrip(name string, color string, state string) {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -434,7 +434,7 @@ func UpdateLedstrip(name string, color string, state string) {
 }
 
 func DBledstrips() []LedStrip {
-	db, err := sql.Open(DriverDB, dbName)
+	db, err := sql.Open(DriverDB, dbDevices)
 	if err != nil {
 		log.Fatal(err)
 	}
