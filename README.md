@@ -1,7 +1,14 @@
-## Home-Panel
+# Home-Panel
 
-### Support
+## A Web application to control all of my IoT devices from [Home-IoT](https://github.com/KNaiskes/Home-IoT)
+repository.
 
-- Relay devices
-- Led strips
-- Temperature and Humidity sensor (DHT22)
+## Building and running
+```
+$ git clone https://github.com/KNaiskes/Home-Panel
+$ cd Home-Panel
+$ go get -d ./...
+$ go install
+```
+
+
