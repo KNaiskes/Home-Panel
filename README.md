@@ -1,7 +1,6 @@
 # Home-Panel
 
-## A Web application to control all of my IoT devices from [Home-IoT](https://github.com/KNaiskes/Home-IoT)
-repository.
+## A Web application to control all of my IoT devices from [Home-IoT](https://github.com/KNaiskes/Home-IoT) repository.
 
 ## Building and running
 ```
