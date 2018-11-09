@@ -10,4 +10,13 @@ $ go get -d ./...
 $ go install
 ```
 
+### Installing Mosquitto
+#### Debian based distros
+```
+$ sudo apt-get install mosquitto mosquitto-clients
+```
 
+#### Arch
+````
+$ sudo pacman -S mosquitto
+````
