@@ -3,6 +3,7 @@ package mqtt
 import (
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	"github.com/KNaiskes/Home-Panel/database"
+	"github.com/KNaiskes/Home-Panel/config"
 	"os"
 	"os/signal"
 	"syscall"
@@ -10,8 +11,8 @@ import (
 	"strings"
 )
 
-const myServer = "tcp://192.168.1.30:1883"
-const clientId = "mqttServer"
+var myServer = config.Getconfig().ServerIP
+var clientId = config.Getconfig().ClientID
 
 func ChangeState(command string, topic string) {
 	opts := MQTT.NewClientOptions()

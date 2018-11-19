@@ -8,6 +8,7 @@ import(
 
 type Config struct {
 	ServerIP string `json:"server_ip"`
+	ClientID string `json:"client_id"`
 }
 
 func Getconfig() Config {
