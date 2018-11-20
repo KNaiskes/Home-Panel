@@ -6,13 +6,15 @@ import(
 	"log"
 )
 
+const filePath = "src/github.com/KNaiskes/Home-Panel/config.json"
+
 type Config struct {
 	ServerIP string `json:"server_ip"`
 	ClientID string `json:"client_id"`
 }
 
 func Getconfig() Config {
-	file, err := os.Open("config.json")
+	file, err := os.Open(filePath)
 
 	if err != nil {
 		log.Fatal(err)
