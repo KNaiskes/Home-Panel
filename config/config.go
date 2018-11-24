@@ -11,6 +11,8 @@ const filePath = "src/github.com/KNaiskes/Home-Panel/config.json"
 type Config struct {
 	ServerIP string `json:"server_ip"`
 	ClientID string `json:"client_id"`
+	MqttUsername string `json:"mqtt_username"`
+	MqttPassword string `json:"mqtt_password"`
 }
 
 func Getconfig() Config {

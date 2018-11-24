@@ -1,4 +1,6 @@
 {
 	"server_ip": "192.168.1.30:1883",
-	"client_id": "mqttServer"
+	"client_id": "mqttServer",
+	"mqtt_username": "myUsername",
+	"mqtt_password": "myPassword"
 }

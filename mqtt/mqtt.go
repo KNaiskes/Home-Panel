@@ -13,11 +13,15 @@ import (
 
 var myServer = config.Getconfig().ServerIP
 var clientId = config.Getconfig().ClientID
+var MqttUsername = config.Getconfig().MqttUsername
+var MqttPassword = config.Getconfig().MqttPassword
 
 func ChangeState(command string, topic string) {
 	opts := MQTT.NewClientOptions()
 	opts.AddBroker(myServer)
 	opts.SetClientID(clientId)
+	opts.SetUsername(MqttUsername)
+	opts.SetPassword(MqttPassword)
 	opts.SetCleanSession(true)
 
 	c := MQTT.NewClient(opts)
@@ -42,6 +46,8 @@ func ChangeColor(color string, topic string) {
 	opts := MQTT.NewClientOptions()
 	opts.AddBroker(myServer)
 	opts.SetClientID(clientId)
+	opts.SetUsername(MqttUsername)
+	opts.SetPassword(MqttPassword)
 	opts.SetCleanSession(true)
 
 	c := MQTT.NewClient(opts)
@@ -82,7 +88,7 @@ func Dht22Mqtt() {
 	qos := 0
 	clientid := "clientid"
 
-	connOpts := MQTT.NewClientOptions().AddBroker(myServer).SetClientID(clientid).SetCleanSession(true)
+	connOpts := MQTT.NewClientOptions().AddBroker(myServer).SetClientID(clientid).SetUsername(MqttUsername).SetPassword(MqttPassword).SetCleanSession(true)
 
 	connOpts.OnConnect = func(c MQTT.Client) {
 		if token := c.Subscribe(topic, byte(qos), onMessageReceived); token.Wait() && token.Error() != nil {
@@ -102,6 +108,8 @@ func SendMsg(topic string, command string) {
 	opts := MQTT.NewClientOptions()
 	opts.AddBroker(myServer)
 	opts.SetClientID(clientId)
+	opts.SetUsername(MqttUsername)
+	opts.SetPassword(MqttPassword)
 	opts.SetCleanSession(true)
 
 	c := MQTT.NewClient(opts)
