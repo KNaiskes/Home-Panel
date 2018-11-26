@@ -46,5 +46,6 @@ Open config.json and add your username and password in the appropriate fields
 
 ``` json
 "mqtt_username": "myUsername"
- "mqtt_password": "myPassword"
+"mqtt_password": "myPassword"
+
 ```
