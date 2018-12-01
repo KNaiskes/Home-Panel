@@ -60,10 +60,6 @@ func CreateMeasurementsDB() {
 }
 
 func DevicesDB() {
-	//TODO: rename function to something more relative
-	//TODO: rename lights table to twoState
-	//TODO: rename database name to something more relative
-
 	twoStateQuery := `CREATE TABLE IF NOT EXISTS 
 			lights(id INTEGER PRIMARY KEY, displayname TEXT, 
 			name TEXT, state TEXT, topic TEXT)`
@@ -350,7 +346,6 @@ func DBexists() {
 	}
 
 }
-
 
 func InsertAll() {
 	db, err := sql.Open(DriverDB, dbDevices)
