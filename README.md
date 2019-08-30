@@ -19,7 +19,7 @@ $ sudo apt-get install mosquitto mosquitto-clients
 
 #### Arch
 ```
-$ sudo pacman -S mosquitto mosquitto-clients
+$ sudo pacman -S mosquitto
 ```
 
 ## Configure Mosquitto
